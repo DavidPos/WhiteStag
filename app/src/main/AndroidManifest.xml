@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="sailloft.whitestag" >
+
+    <uses-sdk tools:overrideLibrary="com.marvinlabs.widget.floatinglabel" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".ui.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.VehicleInformation"
+            android:label="@string/title_activity_vehicle_information"
+            android:parentActivityName=".ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.Citations"
+            android:label="@string/title_activity_citations"
+            android:parentActivityName=".ui.VehicleInformation" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.VehicleInformation" />
+        </activity>
+        <activity
+            android:name=".ui.SnapShot"
+            android:label="@string/title_activity_snap_shot"
+            android:parentActivityName=".ui.VehicleInformation" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.VehicleInformation" />
+        </activity>
+    </application>
+
+</manifest>

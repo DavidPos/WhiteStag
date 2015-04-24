@@ -1,0 +1,81 @@
+<resources>
+    <string name="app_name">WhiteStag</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_vehicle_information">VehicleInformation</string>
+    <string-array name="states">
+        <item>AL</item>
+        <item>AR</item>
+        <item>AZ</item>
+        <item>CA</item>
+        <item>CO</item>
+        <item>CT</item>
+        <item>DE</item>
+        <item>DC</item>
+        <item>FL</item>
+        <item>GA</item>
+        <item>HI</item>
+        <item>ID</item>
+        <item>IL</item>
+        <item>IN</item>
+        <item>IA</item>
+        <item>KS</item>
+        <item>KY</item>
+        <item>LA</item>
+        <item>ME</item>
+        <item>MD</item>
+        <item>MA</item>
+        <item>MI</item>
+        <item>MN</item>
+        <item>MS</item>
+        <item>MO</item>
+        <item>MT</item>
+        <item>NE</item>
+        <item>NV</item>
+        <item>NH</item>
+        <item>NJ</item>
+        <item>NM</item>
+        <item>NY</item>
+        <item>NC</item>
+        <item>ND</item>
+        <item>OH</item>
+        <item>OK</item>
+        <item>OR</item>
+        <item>PA</item>
+        <item>RI</item>
+        <item>SC</item>
+        <item>SD</item>
+        <item>TN</item>
+        <item>TX</item>
+        <item>UT</item>
+        <item>VT</item>
+        <item>VA</item>
+        <item>WA</item>
+        <item>WV</item>
+        <item>WI</item>
+        <item>WY</item>
+    </string-array>
+    <string name="title_activity_citations">Citations</string>
+    <string-array name="locations">
+        <item>1: NICU</item>
+        <item>2: Postage</item>
+        <item>3: LND</item>
+        <item>4: SYB</item>
+        <item>5: Oversize Lot</item>
+        <item>6: Outside West Garage</item>
+        <item>7 and 8: West Garage</item>
+        <item>9: MTT</item>
+        <item>10 and 11: Center Lot</item>
+        <item>12: Supply Center North</item>
+        <item>13: Supply Center South</item>
+        <item>14: Supply Center East</item>
+        <item>15: North Outer Lot East Garage</item>
+        <item>16: East Garage</item>
+        <item>17, 18 and 19: East Process Center</item>
+        <item>20: North Process Center</item>
+        <item>21: ED</item>
+        <item>22: MRI</item>
+    </string-array>
+    <string name="title_activity_snap_shot">SnapShot</string>
+</resources>
