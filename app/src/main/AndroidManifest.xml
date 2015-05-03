@@ -43,6 +43,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.VehicleInformation" />
         </activity>
+        <activity
+            android:name=".ui.VehicleAdd"
+            android:label="@string/title_activity_vehicle_add"
+            android:parentActivityName=".ui.VehicleInformation" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sailloft.whitestag.ui.VehicleInformation" />
+        </activity>
     </application>
 
 </manifest>

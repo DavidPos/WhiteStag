@@ -2,28 +2,53 @@ package sailloft.whitestag.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText;
 import com.marvinlabs.widget.floatinglabel.itempicker.FloatingLabelItemPicker;
 import com.marvinlabs.widget.floatinglabel.itempicker.ItemPickerListener;
 import com.marvinlabs.widget.floatinglabel.itempicker.StringPickerDialogFragment;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import sailloft.whitestag.R;
+import sailloft.whitestag.db.ParkingDataSource;
+import sailloft.whitestag.model.CitationsData;
 
 
 public class Citations extends ActionBarActivity implements ItemPickerListener<String> {
     FloatingLabelItemPicker<String> citeReasonPicker;
     FloatingLabelItemPicker<String> locationPicker;
 
+    FloatingLabelEditText officer;
+
+    FloatingLabelEditText addInfo;
+    protected ParkingDataSource mDataSource;
+    FloatingActionButton addCite;
+    CitationsData mCitationsData;
+
+    public static final String TAG = Citations.class.getSimpleName();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_citations);
+
+        officer = (FloatingLabelEditText)findViewById(R.id.officer);
+
+        addInfo = (FloatingLabelEditText)findViewById(R.id.addInfo);
+        addCite =(FloatingActionButton)findViewById(R.id.addCiteButton);
+        mDataSource = new ParkingDataSource(this);
+
+
         citeReasonPicker = (FloatingLabelItemPicker<String>)findViewById(R.id.citeReason);
 
         citeReasonPicker.setAvailableItems(new ArrayList<String>(Arrays.asList("Item 1.1", "Item 1.2", "Item 1.3", "Item 1.4", "Item 1.5", "Item 1.6", "Item 1.7", "Item 1.8")));
@@ -59,6 +84,7 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
                 location.show(getSupportFragmentManager(), "ItemPicker");
             }
         });
+
 }
 
     @Override
@@ -69,12 +95,64 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
     public void onItemsSelected(int pickerId, int[] selectedIndices) {
         if (pickerId == R.id.citeReason) {
             citeReasonPicker.setSelectedIndices(selectedIndices);
+            //for() to go through each item in the selected indices array and add to the string
+
         }
         else if(pickerId == R.id.locationPicker ){
             locationPicker.setSelectedIndices(selectedIndices);
+            String mLocations = getResources().getTextArray(R.array.locations)[selectedIndices[0]].toString();
+            Log.i(TAG, mLocations );
+
         }
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+
+
+            addCite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                    mDataSource.open();
+
+
+
+
+                    java.util.Date date = new java.util.Date();
+                    String citeReason = citeReasonPicker.getSelectedItems().toString();
+
+
+                   mCitationsData = new CitationsData(1,
+                           officer.getInputWidgetText().toString(),
+                           citeReason ,
+                           date.getTime(),
+                           0,
+                           1,
+                           addInfo.getInputWidgetText().toString(),
+                           "KSMC");
+                    mDataSource.insertCitations(mCitationsData);
+
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mDataSource.close();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

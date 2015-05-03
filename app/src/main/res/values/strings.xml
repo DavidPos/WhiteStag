@@ -78,4 +78,5 @@
         <item>22: MRI</item>
     </string-array>
     <string name="title_activity_snap_shot">SnapShot</string>
+    <string name="title_activity_vehicle_add">VehicleAdd</string>
 </resources>

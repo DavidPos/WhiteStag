@@ -1,8 +1,7 @@
 package sailloft.whitestag.ui;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,42 +19,37 @@ import java.util.Collection;
 
 import sailloft.whitestag.R;
 import sailloft.whitestag.db.ParkingDataSource;
+import sailloft.whitestag.model.VehicleData;
 
 
-public class MainActivity extends ActionBarActivity implements ItemPickerListener<String>, FloatingLabelItemPicker.OnItemPickerEventListener<String> {
+public class VehicleAdd extends ActionBarActivity implements ItemPickerListener<String>, FloatingLabelItemPicker.OnItemPickerEventListener<String> {
     FloatingLabelItemPicker<String> statePicker;
+    FloatingLabelEditText plateNumber;
 
-    private FloatingActionButton plateSearch;
-    protected ParkingDataSource mDataSource;
-    private FloatingLabelEditText plate;
-
-    private String mPlate;
-
-
+    FloatingLabelEditText vehicleModel;
+    FloatingLabelEditText vehicleMake;
+    FloatingLabelEditText vehicleYear;
+    FloatingLabelEditText vehicleOwner;
+    protected ParkingDataSource mParkingDataSource;
+    FloatingActionButton addVehicle;
+    private VehicleData mVehicle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mDataSource = new ParkingDataSource(MainActivity.this);
-        plate = (FloatingLabelEditText)findViewById(R.id.plateNumberEdit);
+        setContentView(R.layout.activity_vehicle_add);
+        plateNumber = (FloatingLabelEditText)findViewById(R.id.plateInfo);
+        vehicleModel =(FloatingLabelEditText)findViewById(R.id.vehicleModel) ;
+        vehicleMake =(FloatingLabelEditText)findViewById(R.id.vehicleMake) ;
+        vehicleYear = (FloatingLabelEditText)findViewById(R.id.yearText);
+        vehicleOwner = (FloatingLabelEditText)findViewById(R.id.vehicleOwner);
+        addVehicle = (FloatingActionButton)findViewById(R.id.addVehicleButton);
 
+        mParkingDataSource = new ParkingDataSource(this);
 
-        plateSearch = (FloatingActionButton)findViewById(R.id.searchFab);
+        statePicker = (FloatingLabelItemPicker<String>)findViewById(R.id.statePickerVeh);
 
-        plateSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPlate = plate.getInputWidgetText().toString();
-
-                Intent intent = new Intent(MainActivity.this, VehicleInformation.class);
-                startActivity(intent);
-
-            }
-        });
-        statePicker = (FloatingLabelItemPicker<String>)findViewById(R.id.statePicker);
         String[] states = getResources().getStringArray(R.array.states);
-
         statePicker.setAvailableItems(new ArrayList<String>(Arrays.asList(states)));
         statePicker.setWidgetListener(new FloatingLabelItemPicker.OnWidgetEventListener<String>() {
             @Override
@@ -74,14 +68,23 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
     }
 
     @Override
-    public void onCancelled(int pickerId) {
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         try {
-            mDataSource.open();
+            mParkingDataSource.open();
+            addVehicle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mVehicle = new VehicleData(vehicleMake.getInputWidgetText().toString(),
+                            vehicleModel.getInputWidgetText().toString(),
+                            plateNumber.getInputWidgetText().toString(),
+                            statePicker.getSelectedItems().toString(),
+                            vehicleYear.getInputWidgetText().toString(),
+                            1);
+                    mParkingDataSource.insertVehicle(mVehicle);
+                }
+            });
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -90,21 +93,12 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
     @Override
     protected void onPause() {
         super.onPause();
-        mDataSource.close();
+        mParkingDataSource.close();
     }
-
-    @Override
-    public void onItemsSelected(int pickerId, int[] selectedIndices) {
-        statePicker.setSelectedIndices(selectedIndices);
-    }
-
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_vehicle_add, menu);
         return true;
     }
 
@@ -121,6 +115,17 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCancelled(int i) {
+
+    }
+
+    @Override
+    public void onItemsSelected(int i, int[] selectedIndices) {
+        statePicker.setSelectedIndices(selectedIndices);
+
     }
 
     @Override

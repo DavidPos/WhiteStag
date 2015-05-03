@@ -17,6 +17,15 @@
         android:layout_centerInParent="true"
         android:footerDividersEnabled="true"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No vehicle on record"
+        android:id="@android:id/empty"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/black"/>
+
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

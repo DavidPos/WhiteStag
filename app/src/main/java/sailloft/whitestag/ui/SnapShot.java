@@ -23,6 +23,7 @@ public class SnapShot extends ActionBarActivity implements ItemPickerListener<St
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snap_shot);
+
         locationPicker = (FloatingLabelItemPicker<String>)findViewById(R.id.locationPicker);
         String[] location = getResources().getStringArray(R.array.locations);
 
@@ -54,6 +55,17 @@ public class SnapShot extends ActionBarActivity implements ItemPickerListener<St
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

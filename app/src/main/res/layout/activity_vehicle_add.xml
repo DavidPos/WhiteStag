@@ -1,24 +1,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:fab="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context="sailloft.whitestag.ui.Citations">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
+                tools:context="sailloft.whitestag.ui.VehicleAdd">
     <TextView
-        android:id="@+id/vehicleLabel"
+        android:id="@+id/addVehicleLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Citation Vehicle: 504 DRY"
+        tools:text="Add Vehicle"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:textSize="25sp"
         android:textColor="@android:color/black"
         android:layout_centerHorizontal="true"/>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,59 +27,66 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:layout_below="@+id/vehicleLabel">
+        android:layout_below="@+id/addVehicleLabel">
 
 
 
-        <com.marvinlabs.widget.floatinglabel.itempicker.FloatingLabelItemPicker
-            android:id="@+id/locationPicker"
+    <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
+        android:id="@+id/plateInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        app:flw_labelText="Plate #" />
+
+    <com.marvinlabs.widget.floatinglabel.itempicker.FloatingLabelItemPicker
+            android:id="@+id/statePickerVeh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:flw_labelText="State"
+            android:layout_marginBottom="15dp"/>
+
+    <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
+        android:id="@+id/vehicleModel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:drawablePadding="10dp"
+        app:flw_labelText="Vehicle Model" />
+
+    <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
+        android:id="@+id/vehicleMake"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:drawablePadding="10dp"
+        app:flw_labelText= "Vehicle Make" />
+    <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
+            android:id="@+id/yearText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            app:flw_labelText="Location" />
+            app:flw_labelText="Vehicle Year" />
 
-        <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
-            android:id="@+id/officer"
+    <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
+            android:id="@+id/vehicleOwner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:drawablePadding="10dp"
-            app:flw_labelText="Issuing Officer"
-            />
-
-        <com.marvinlabs.widget.floatinglabel.itempicker.FloatingLabelItemPicker
-            android:id="@+id/citeReason"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            app:flw_labelText="Citation Reason" />
-
-
-
-
-
-        <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
-            android:id="@+id/addInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:drawablePadding="10dp"
-            android:inputType="textMultiLine"
-            app:flw_labelText="Additional Information" />
+            app:flw_labelText="Owner " />
 
     </LinearLayout>
     <com.getbase.floatingactionbutton.AddFloatingActionButton
-        android:id="@+id/addCiteButton"
+        android:id="@+id/addVehicleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         fab:fab_addButtonColorNormal="@color/white"
         fab:fab_addButtonColorPressed="@color/white_pressed"
         fab:fab_addButtonPlusIconColor="@color/half_black"
-
         fab:fab_labelStyle="@style/menu_labels_style"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
+
 </RelativeLayout>

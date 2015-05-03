@@ -9,7 +9,16 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class ParkingHelper extends SQLiteOpenHelper {
     public static final String TABLE_VEHICLES = "VEHICLES";
+    public static final String TABLE_OWNERS = "OWNERS";
+    public static final String TABLE_CITATIONS ="CITATIONS";
+    public static final String TABLE_VEHICLE_SNAPSHOT = "SNAPSHOT";
+   //common columns
     public static final String COLUMN_ID = "_ID";
+    public static final String COLUMN_LOCATION = "LOCATION";
+    public static final String COLUMN_DATE_TIME = "DATE_TIME";
+
+    public static final String COLUMN_VEHICLE = "VEHICLE";
+    //columns for vehicle table
     public static final String COLUMN_MAKE = "MAKE";
     public static final String COLUMN_MODEL = "MODEL";
     public static final String COLUMN_YEAR = "YEAR";
@@ -17,18 +26,60 @@ public class ParkingHelper extends SQLiteOpenHelper {
     public static final String COLUMN_OWNER = "OWNER";
     public static final String COLUMN_PLATE_STATE ="PLATE_STATE";
     public static final String COLUMN_ALT_OWNER = "ALT_OWNER";
+    //columns for owner table
+    public static final String COLUMN_FIRST_NAME = "FIRST_NAME";
+    public static final String COLUMN_LAST_NAME = "LAST_NAME";
+    public static final String COLUMN_PERMITS = "PERMITS";
+    public static final String COLUMN_DEPARTMENT = "DEPARTMENT";
+    //columns for citations table
+    public static final String COLUMN_CITATIONS_TYPE = "CITATIONS_TYPE";
+    public static final String COLUMN_OFFICER = "OFFICER";
+    public static final String COLUMN_ADDITIONAL = "ADDITIONAL";
+    public static final String COLUMN_BOOT = "BOOT";
+
+
     private static final String DB_NAME = "parking.db";
     private static final int DB_VERSION = 1;
-    private static final String DB_CREATE =
+    private static final String CREATE_TABLE_VEHICLES =
             "CREATE TABLE " + TABLE_VEHICLES + " ("+
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_MAKE + " STRING, " +
-                    COLUMN_MODEL + " STRING, " +
+                    COLUMN_MAKE + " TEXT, " +
+                    COLUMN_MODEL + " TEXT, " +
                     COLUMN_YEAR + " INTEGER, " +
-                    COLUMN_PLATE_NUMBER + " STRING, " +
-                    COLUMN_PLATE_STATE + " STRING, " +
-                    COLUMN_OWNER + " STRING, " +
-                    COLUMN_ALT_OWNER + " STRING)";
+                    COLUMN_PLATE_NUMBER + " TEXT, " +
+                    COLUMN_PLATE_STATE + " TEXT, " +
+                    COLUMN_OWNER + " INTEGER, FOREIGN KEY (" + COLUMN_OWNER +") REFERENCES "+ TABLE_OWNERS +" ("+COLUMN_ID+"), "+
+                    COLUMN_ALT_OWNER + " INTEGER)";
+
+    private static final String CREATE_TABLE_OWNERS =
+            "CREATE TABLE " + TABLE_OWNERS + " ("+
+                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_FIRST_NAME + " TEXT, " +
+                    COLUMN_LAST_NAME + " TEXT, " +
+                    COLUMN_PERMITS + " TEXT, " +
+                    COLUMN_LOCATION + " TEXT, " +
+                    COLUMN_DEPARTMENT + " TEXT)";
+
+    private static final String CREATE_TABLE_CITATIONS =
+            "CREATE TABLE " + TABLE_CITATIONS + " ("+
+                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_CITATIONS_TYPE + " TEXT, " +
+                    COLUMN_OWNER + " INTEGER, " +
+                    COLUMN_OFFICER + " TEXT, " +
+                    COLUMN_BOOT + " INTEGER, " +
+                    COLUMN_DATE_TIME + " INTEGER, " +
+                    COLUMN_VEHICLE + " INTEGER, " +
+                    COLUMN_ADDITIONAL + " TEXT, "+
+                    COLUMN_LOCATION + " TEXT)";
+
+    private static final String CREATE_TABLE_VEHICLE_SNAPSHOT =
+            "CREATE TABLE " + TABLE_VEHICLE_SNAPSHOT + " ("+
+                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_OWNER + " INTEGER, " +
+                    COLUMN_DATE_TIME + " INTEGER, " +
+                    COLUMN_VEHICLE + " INTEGER, "+
+                    COLUMN_LOCATION + " TEXT)";
+
 
 
     public ParkingHelper(Context context) {
@@ -37,7 +88,11 @@ public class ParkingHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(DB_CREATE);
+        db.execSQL(CREATE_TABLE_VEHICLES);
+        db.execSQL(CREATE_TABLE_OWNERS);
+        db.execSQL(CREATE_TABLE_CITATIONS);
+        db.execSQL(CREATE_TABLE_VEHICLE_SNAPSHOT);
+
 
     }
 

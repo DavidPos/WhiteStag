@@ -1,23 +1,34 @@
 package sailloft.whitestag.ui;
 
+import android.app.ListActivity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import sailloft.whitestag.R;
+import sailloft.whitestag.db.ParkingDataSource;
 
 
-public class VehicleInformation extends ActionBarActivity {
+public class VehicleInformation extends ListActivity {
+
+    protected ParkingDataSource mParkingDataSource;
+    private ArrayList<String> mVehiclesPlate;
+    private ArrayList<String> mVehicleMake;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle_information);
+        mParkingDataSource = new ParkingDataSource(VehicleInformation.this);
         final FloatingActionButton snapShot = (FloatingActionButton) findViewById(R.id.snapShotButton);
         snapShot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +48,36 @@ public class VehicleInformation extends ActionBarActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            mParkingDataSource.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mParkingDataSource.close();
+    }
+    protected void updateList(Cursor cursor){
+        cursor.moveToFirst();
+        //get vehicle id number from vehicle table
+        //search citiations table for all citiations with the vehicle id
+        //display in list
+        //search snapshot table for all occurences of vehicle id
+        //display in list
+        while(!cursor.isAfterLast()){
+            //do stuff
+
+
+            cursor.moveToNext();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
