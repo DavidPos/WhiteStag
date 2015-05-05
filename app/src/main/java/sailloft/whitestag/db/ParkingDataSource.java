@@ -18,8 +18,8 @@ public class ParkingDataSource {
     private SQLiteDatabase mDatabase;
     private ParkingHelper mParkingHelper;
     private Context mContext;
-    private String[] allOwnersColumns = {ParkingHelper.COLUMN_FIRST_NAME, ParkingHelper.COLUMN_LAST_NAME, ParkingHelper.COLUMN_PERMITS, ParkingHelper.COLUMN_LOCATION, ParkingHelper.COLUMN_DEPARTMENT};
-
+    private String[] allOwnersColumns = {ParkingHelper.COLUMN_ID, ParkingHelper.COLUMN_FIRST_NAME, ParkingHelper.COLUMN_LAST_NAME, ParkingHelper.COLUMN_PERMITS, ParkingHelper.COLUMN_LOCATION, ParkingHelper.COLUMN_DEPARTMENT};
+    private String[] allCitationColumns ={ParkingHelper.COLUMN_ID, ParkingHelper.COLUMN_CITATIONS_TYPE, ParkingHelper.COLUMN_OWNER,ParkingHelper.COLUMN_OFFICER, ParkingHelper.COLUMN_BOOT, ParkingHelper.COLUMN_DATE_TIME, ParkingHelper.COLUMN_VEHICLE, ParkingHelper.COLUMN_ADDITIONAL, ParkingHelper.COLUMN_LOCATION};
     public ParkingDataSource(Context context){
         mContext = context;
         mParkingHelper = new ParkingHelper(mContext);
@@ -139,6 +139,19 @@ public class ParkingDataSource {
                 allOwnersColumns,
                 ParkingHelper.COLUMN_ID +" = ?",
                 new String[]{Integer.toString(ownerId)},
+                null,
+                null,
+                null,
+                null);
+        return cursor;
+    }
+
+    public Cursor selectCitationsForVehicle(int vehicleId){
+        Cursor cursor = mDatabase.query(
+                ParkingHelper.TABLE_CITATIONS,
+                allCitationColumns,
+                ParkingHelper.COLUMN_VEHICLE +" = ?",
+                new String[]{Integer.toString(vehicleId)},
                 null,
                 null,
                 null,

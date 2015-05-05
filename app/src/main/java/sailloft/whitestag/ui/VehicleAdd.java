@@ -1,35 +1,30 @@
 package sailloft.whitestag.ui;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText;
-import com.marvinlabs.widget.floatinglabel.itempicker.FloatingLabelItemPicker;
-import com.marvinlabs.widget.floatinglabel.itempicker.ItemPickerListener;
-import com.marvinlabs.widget.floatinglabel.itempicker.StringPickerDialogFragment;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 
 import sailloft.whitestag.R;
 import sailloft.whitestag.db.ParkingDataSource;
 import sailloft.whitestag.model.VehicleData;
 
 
-public class VehicleAdd extends ActionBarActivity implements ItemPickerListener<String>, FloatingLabelItemPicker.OnItemPickerEventListener<String> {
-    FloatingLabelItemPicker<String> statePicker;
+public class VehicleAdd extends ActionBarActivity {
+    FloatingLabelEditText state;
     FloatingLabelEditText plateNumber;
 
     FloatingLabelEditText vehicleModel;
     FloatingLabelEditText vehicleMake;
     FloatingLabelEditText vehicleYear;
-    FloatingLabelEditText vehicleOwner;
+
     protected ParkingDataSource mParkingDataSource;
     FloatingActionButton addVehicle;
     private VehicleData mVehicle;
@@ -42,29 +37,16 @@ public class VehicleAdd extends ActionBarActivity implements ItemPickerListener<
         vehicleModel =(FloatingLabelEditText)findViewById(R.id.vehicleModel) ;
         vehicleMake =(FloatingLabelEditText)findViewById(R.id.vehicleMake) ;
         vehicleYear = (FloatingLabelEditText)findViewById(R.id.yearText);
-        vehicleOwner = (FloatingLabelEditText)findViewById(R.id.vehicleOwner);
+
         addVehicle = (FloatingActionButton)findViewById(R.id.addVehicleButton);
 
         mParkingDataSource = new ParkingDataSource(this);
 
-        statePicker = (FloatingLabelItemPicker<String>)findViewById(R.id.statePickerVeh);
+        state = (FloatingLabelEditText)findViewById(R.id.statePickerVeh);
 
-        String[] states = getResources().getStringArray(R.array.states);
-        statePicker.setAvailableItems(new ArrayList<String>(Arrays.asList(states)));
-        statePicker.setWidgetListener(new FloatingLabelItemPicker.OnWidgetEventListener<String>() {
-            @Override
-            public void onShowItemPickerDialog(FloatingLabelItemPicker<String> source) {
-                StringPickerDialogFragment statePicker = StringPickerDialogFragment.newInstance(
-                        source.getId(),
-                        "Select State",
-                        "OK", "Cancel",
-                        false,
-                        source.getSelectedIndices(),
-                        new ArrayList<>(source.getAvailableItems()));
-
-                statePicker.show(getSupportFragmentManager(), "ItemPicker");
-            }
-        });
+        Intent recent = getIntent();
+        state.setInputWidgetText(recent.getStringExtra("State"));
+        plateNumber.setInputWidgetText(recent.getStringExtra("Plate"));
     }
 
     @Override
@@ -72,16 +54,22 @@ public class VehicleAdd extends ActionBarActivity implements ItemPickerListener<
         super.onResume();
         try {
             mParkingDataSource.open();
+
             addVehicle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mVehicle = new VehicleData(vehicleMake.getInputWidgetText().toString(),
                             vehicleModel.getInputWidgetText().toString(),
                             plateNumber.getInputWidgetText().toString(),
-                            statePicker.getSelectedItems().toString(),
+                            state.getInputWidgetText().toString(),
                             vehicleYear.getInputWidgetText().toString(),
-                            1);
+                            0);
                     mParkingDataSource.insertVehicle(mVehicle);
+                    Intent intent = new Intent(VehicleAdd.this, VehicleInformation.class);
+                    intent.putExtra(MainActivity.plateExtra, plateNumber.getInputWidgetText().toString());
+                    intent.putExtra(MainActivity.stateExtra, state.getInputWidgetText().toString());
+                    startActivity(intent);
+
                 }
             });
 
@@ -117,19 +105,5 @@ public class VehicleAdd extends ActionBarActivity implements ItemPickerListener<
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onCancelled(int i) {
 
-    }
-
-    @Override
-    public void onItemsSelected(int i, int[] selectedIndices) {
-        statePicker.setSelectedIndices(selectedIndices);
-
-    }
-
-    @Override
-    public void onSelectionChanged(FloatingLabelItemPicker<String> stringFloatingLabelItemPicker, Collection<String> strings) {
-
-    }
 }

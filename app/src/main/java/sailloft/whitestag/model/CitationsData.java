@@ -17,13 +17,13 @@ public class CitationsData implements Serializable{
     private String mAddInfo;
     private String mLocation;
 
-    public CitationsData(int owner, String officer, String citationType, long timeDate, int boot,int vehicle, String addInfo, String location){
+    public CitationsData(int owner, String officer, String citationType, long timeDate, int boot, int vehicle, String addInfo, String location){
 
         mOwner = owner;
         mOfficer = officer;
         mCitationType = citationType;
         mTimeDate = timeDate;
-        mBoot = boot;
+        mBoot = boot;//0 means not signed boot form :1 means form signed
         mVehicle = vehicle;
         mAddInfo = addInfo;
         mLocation = location;

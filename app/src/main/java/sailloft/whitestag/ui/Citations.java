@@ -1,5 +1,6 @@
 package sailloft.whitestag.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -81,7 +82,7 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
                         source.getSelectedIndices(),
                         new ArrayList<>(source.getAvailableItems()));
 
-                location.show(getSupportFragmentManager(), "ItemPicker");
+                location.show(getSupportFragmentManager(), "Item");
             }
         });
 
@@ -110,6 +111,8 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
     @Override
     protected void onResume() {
         super.onResume();
+        Intent intent = getIntent();
+        final int vehicleId = intent.getIntExtra("vehicleID", 0);
 
 
 
@@ -132,9 +135,9 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
                            citeReason ,
                            date.getTime(),
                            0,
-                           1,
+                           vehicleId,
                            addInfo.getInputWidgetText().toString(),
-                           "KSMC");
+                           locationPicker.getInputWidget().getText().toString());
                     mDataSource.insertCitations(mCitationsData);
 
                     } catch (SQLException e) {

@@ -30,6 +30,9 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
     private FloatingLabelEditText plate;
 
     private String mPlate;
+    private String mState;
+    public static final String plateExtra = "PLATE_NUMBER";
+    public static final String stateExtra = "PLATE_STATE";
 
 
 
@@ -47,8 +50,11 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
             @Override
             public void onClick(View v) {
                 mPlate = plate.getInputWidgetText().toString();
+                mState = statePicker.getSelectedItems().toString();
 
                 Intent intent = new Intent(MainActivity.this, VehicleInformation.class);
+                intent.putExtra(plateExtra, mPlate);
+                intent.putExtra(stateExtra, mState);
                 startActivity(intent);
 
             }
