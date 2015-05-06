@@ -67,6 +67,13 @@
             android:layout_marginBottom="15dp"
             app:flw_labelText="Vehicle Year" />
 
+        <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
+            android:id="@+id/vehicleOwner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            app:flw_labelText="Owner" />
+
     </LinearLayout>
     <com.getbase.floatingactionbutton.AddFloatingActionButton
         android:id="@+id/addVehicleButton"

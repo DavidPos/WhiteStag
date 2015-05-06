@@ -30,15 +30,6 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         android:layout_below="@+id/vehicleLabel">
 
-
-
-        <com.marvinlabs.widget.floatinglabel.itempicker.FloatingLabelItemPicker
-            android:id="@+id/locationPicker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            app:flw_labelText="Location" />
-
         <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
             android:id="@+id/officer"
             android:layout_width="match_parent"
@@ -47,6 +38,15 @@
             android:drawablePadding="10dp"
             app:flw_labelText="Issuing Officer"
             />
+
+        <com.marvinlabs.widget.floatinglabel.itempicker.FloatingLabelItemPicker
+            android:id="@+id/locationPicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            app:flw_labelText="Location" />
+
+
 
         <com.marvinlabs.widget.floatinglabel.itempicker.FloatingLabelItemPicker
             android:id="@+id/citeReason"

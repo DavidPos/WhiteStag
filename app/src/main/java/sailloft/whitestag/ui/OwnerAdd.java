@@ -1,18 +1,79 @@
 package sailloft.whitestag.ui;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText;
+
+import java.sql.SQLException;
 
 import sailloft.whitestag.R;
+import sailloft.whitestag.db.ParkingDataSource;
+import sailloft.whitestag.model.OwnerData;
 
 public class OwnerAdd extends ActionBarActivity {
+   protected ParkingDataSource mParkingDataSource;
+    private FloatingLabelEditText mFirstName;
+    private FloatingLabelEditText mLastName;
+    private FloatingLabelEditText mPermits;
+    private FloatingLabelEditText mBuilding;
+    private FloatingLabelEditText mDepartment;
+    private FloatingActionButton mAddOwner;
+    private OwnerData mOwner;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_add);
+        mFirstName = (FloatingLabelEditText)findViewById(R.id.firstNameOwner);
+        mLastName = (FloatingLabelEditText)findViewById(R.id.lastName);
+        mPermits = (FloatingLabelEditText)findViewById(R.id.permits);
+        mBuilding = (FloatingLabelEditText)findViewById(R.id.building);
+        mDepartment = (FloatingLabelEditText)findViewById(R.id.department);
+        mAddOwner = (FloatingActionButton)findViewById(R.id.addOwnerButton);
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            mParkingDataSource.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        mAddOwner.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                mOwner = new OwnerData(mFirstName.getInputWidgetText().toString(),
+                        mLastName.getInputWidgetText().toString(),
+                        mPermits.getInputWidgetText().toString(),
+                        mDepartment.getInputWidgetText().toString(),
+                        mBuilding.getInputWidgetText().toString());
+                mParkingDataSource.insertOwner(mOwner);
+                name = mFirstName.getInputWidgetText().toString() + " " + mLastName.getInputWidgetText().toString();
+                Intent intent = new Intent(OwnerAdd.this, VehicleAdd.class);
+                intent.putExtra("name", name);
+                startActivity(intent);
+
+
+            }
+        });
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mParkingDataSource.close();
     }
 
     @Override

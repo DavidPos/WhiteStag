@@ -158,6 +158,19 @@ public class ParkingDataSource {
                 null);
         return cursor;
     }
+
+    public Cursor selectOwner(int ownerId){
+        Cursor cursor = mDatabase.query(ParkingHelper.TABLE_OWNERS,
+                null,
+                ParkingHelper.COLUMN_ID + " = ?",
+                new String[]{Integer.toString(ownerId)},
+                null,
+                null,
+                null,
+                null);
+        return cursor;
+
+    }
     //update
 
     //delete

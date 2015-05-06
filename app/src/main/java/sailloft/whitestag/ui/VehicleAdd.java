@@ -18,15 +18,15 @@ import sailloft.whitestag.model.VehicleData;
 
 
 public class VehicleAdd extends ActionBarActivity {
-    FloatingLabelEditText state;
-    FloatingLabelEditText plateNumber;
+    private FloatingLabelEditText state;
+    private FloatingLabelEditText plateNumber;
 
-    FloatingLabelEditText vehicleModel;
-    FloatingLabelEditText vehicleMake;
-    FloatingLabelEditText vehicleYear;
-
+    private FloatingLabelEditText vehicleModel;
+    private FloatingLabelEditText vehicleMake;
+    private FloatingLabelEditText vehicleYear;
+    private FloatingLabelEditText vehicleOwner;
     protected ParkingDataSource mParkingDataSource;
-    FloatingActionButton addVehicle;
+    private FloatingActionButton addVehicle;
     private VehicleData mVehicle;
 
     @Override
