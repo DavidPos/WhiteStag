@@ -33,6 +33,7 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
     protected ParkingDataSource mDataSource;
     FloatingActionButton addCite;
     CitationsData mCitationsData;
+    private int vehicleId;
 
     public static final String TAG = Citations.class.getSimpleName();
 
@@ -42,6 +43,9 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_citations);
+        Intent intent = getIntent();
+        vehicleId = intent.getIntExtra("vehicleID",0);
+
 
         officer = (FloatingLabelEditText)findViewById(R.id.officer);
 
@@ -111,8 +115,6 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
     @Override
     protected void onResume() {
         super.onResume();
-        Intent intent = getIntent();
-        final int vehicleId = intent.getIntExtra("vehicleID", 0);
 
 
 
@@ -139,6 +141,8 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
                            addInfo.getInputWidgetText().toString(),
                            locationPicker.getInputWidget().getText().toString());
                     mDataSource.insertCitations(mCitationsData);
+                        Intent intent = new Intent(Citations.this,MainActivity.class);
+                        startActivity(intent);
 
                     } catch (SQLException e) {
                         e.printStackTrace();

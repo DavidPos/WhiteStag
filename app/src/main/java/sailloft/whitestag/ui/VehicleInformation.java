@@ -40,9 +40,12 @@ public class VehicleInformation extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle_information);
         Intent intent = getIntent();
+
         mPlate = intent.getStringExtra(MainActivity.plateExtra);
         mState = intent.getStringExtra(MainActivity.stateExtra);
+
         mParkingDataSource = new ParkingDataSource(VehicleInformation.this);
+
         final FloatingActionButton snapShot = (FloatingActionButton) findViewById(R.id.snapShotButton);
         snapShot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,9 +101,9 @@ public class VehicleInformation extends ListActivity {
         }
         else {
             vehicle.moveToFirst();
-            //int i = vehicle.getColumnIndex(0);
+            int i = vehicle.getColumnIndex(ParkingHelper.COLUMN_OWNER);
 
-            vehicleID = vehicle.getInt(1);
+            vehicleID = vehicle.getInt(i);
             Log.e("VEHICLEID", Integer.toString(vehicleID));
             Cursor citations = mParkingDataSource.selectCitationsForVehicle(vehicleID);
 
