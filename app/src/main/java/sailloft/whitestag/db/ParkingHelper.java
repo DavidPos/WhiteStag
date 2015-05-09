@@ -48,8 +48,8 @@ public class ParkingHelper extends SQLiteOpenHelper {
                     COLUMN_YEAR + " INTEGER, " +
                     COLUMN_PLATE_NUMBER + " TEXT, " +
                     COLUMN_PLATE_STATE + " TEXT, " +
-                    COLUMN_OWNER + " INTEGER, FOREIGN KEY (" + COLUMN_OWNER +") REFERENCES "+ TABLE_OWNERS +" ("+COLUMN_ID+"), "+
-                    COLUMN_ALT_OWNER + " INTEGER)";
+                    COLUMN_OWNER + " INTEGER, " +
+                    COLUMN_ALT_OWNER + " INTEGER, " + "FOREIGN KEY(" + COLUMN_OWNER +") REFERENCES "+ TABLE_OWNERS +"("+COLUMN_ID+"))";
 
     private static final String CREATE_TABLE_OWNERS =
             "CREATE TABLE " + TABLE_OWNERS + " ("+
@@ -92,6 +92,9 @@ public class ParkingHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_OWNERS);
         db.execSQL(CREATE_TABLE_CITATIONS);
         db.execSQL(CREATE_TABLE_VEHICLE_SNAPSHOT);
+        if (!db.isReadOnly()){
+            db.execSQL("PRAGMA foreign_keys=ON;");
+        }
 
 
     }

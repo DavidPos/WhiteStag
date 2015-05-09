@@ -1,8 +1,9 @@
 package sailloft.whitestag.ui;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 
 import sailloft.whitestag.R;
 import sailloft.whitestag.db.ParkingDataSource;
+import sailloft.whitestag.db.ParkingHelper;
 import sailloft.whitestag.model.OwnerData;
 
 public class OwnerAdd extends ActionBarActivity {
@@ -25,18 +27,26 @@ public class OwnerAdd extends ActionBarActivity {
     private FloatingLabelEditText mDepartment;
     private FloatingActionButton mAddOwner;
     private OwnerData mOwner;
-    private String name;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_add);
+
         mFirstName = (FloatingLabelEditText)findViewById(R.id.firstNameOwner);
         mLastName = (FloatingLabelEditText)findViewById(R.id.lastName);
         mPermits = (FloatingLabelEditText)findViewById(R.id.permits);
         mBuilding = (FloatingLabelEditText)findViewById(R.id.building);
         mDepartment = (FloatingLabelEditText)findViewById(R.id.department);
         mAddOwner = (FloatingActionButton)findViewById(R.id.addOwnerButton);
+        mParkingDataSource = new ParkingDataSource(this);
+        Intent intent = getIntent();
+        if(intent != null) {
+            mFirstName.setInputWidgetText(intent.getStringExtra("first"));
+            mLastName.setInputWidgetText(intent.getStringExtra("last"));
+        }
 
 
     }
@@ -59,10 +69,18 @@ public class OwnerAdd extends ActionBarActivity {
                         mDepartment.getInputWidgetText().toString(),
                         mBuilding.getInputWidgetText().toString());
                 mParkingDataSource.insertOwner(mOwner);
-                name = mFirstName.getInputWidgetText().toString() + " " + mLastName.getInputWidgetText().toString();
+
+                Cursor owner = mParkingDataSource.selectOwnerByName(mFirstName.getInputWidgetText().toString(),
+                        mLastName.getInputWidgetText().toString());
+                owner.moveToFirst();
+                int i = owner.getColumnIndex(ParkingHelper.COLUMN_ID);
+                int ownerId = owner.getInt(i);
+
                 Intent intent = new Intent(OwnerAdd.this, VehicleAdd.class);
-                intent.putExtra("name", name);
-                startActivity(intent);
+
+                intent.putExtra("ownerId", ownerId);
+                setResult(RESULT_OK, intent);
+                finish();
 
 
             }

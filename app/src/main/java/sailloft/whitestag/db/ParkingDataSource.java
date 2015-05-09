@@ -29,6 +29,7 @@ public class ParkingDataSource {
     public void open() throws SQLException{
         mDatabase = mParkingHelper.getWritableDatabase();
 
+
     }
     //close
     public void close(){
@@ -104,7 +105,7 @@ public class ParkingDataSource {
     public Cursor selectAllVehicles(){
         Cursor cursor = mDatabase.query(
                 ParkingHelper.TABLE_VEHICLES,//table
-                new String[]{ParkingHelper.COLUMN_PLATE_NUMBER, ParkingHelper.COLUMN_MAKE, ParkingHelper.COLUMN_MODEL, ParkingHelper.COLUMN_OWNER},//column names
+                new String[]{ParkingHelper.COLUMN_ID, ParkingHelper.COLUMN_PLATE_NUMBER,ParkingHelper.COLUMN_PLATE_STATE, ParkingHelper.COLUMN_MAKE, ParkingHelper.COLUMN_MODEL, ParkingHelper.COLUMN_OWNER},//column names
                 null,//where clause
                 null,//where params
                 null,//groupby
@@ -120,7 +121,7 @@ public class ParkingDataSource {
 
         Cursor cursor = mDatabase.query(
                 ParkingHelper.TABLE_VEHICLES,
-                new String[]{ParkingHelper.COLUMN_PLATE_NUMBER, ParkingHelper.COLUMN_MAKE, ParkingHelper.COLUMN_MODEL, ParkingHelper.COLUMN_OWNER},
+                new String[]{ParkingHelper.COLUMN_ID, ParkingHelper.COLUMN_PLATE_NUMBER, ParkingHelper.COLUMN_MAKE, ParkingHelper.COLUMN_MODEL, ParkingHelper.COLUMN_OWNER},
                 ParkingHelper.COLUMN_PLATE_NUMBER + " = ?" +
                 " AND " + ParkingHelper.COLUMN_PLATE_STATE + " = ?",
                 new String[]{plate, plateState},
@@ -159,11 +160,36 @@ public class ParkingDataSource {
         return cursor;
     }
 
+    public Cursor selectCitationsForPerson(int ownerId){
+        Cursor cursor = mDatabase.query(
+                ParkingHelper.TABLE_CITATIONS,
+                allCitationColumns,
+                ParkingHelper.COLUMN_OWNER +" = ?",
+                new String[]{Integer.toString(ownerId)},
+                null,
+                null,
+                null,
+                null);
+        return cursor;
+    }
     public Cursor selectOwner(int ownerId){
         Cursor cursor = mDatabase.query(ParkingHelper.TABLE_OWNERS,
                 null,
                 ParkingHelper.COLUMN_ID + " = ?",
                 new String[]{Integer.toString(ownerId)},
+                null,
+                null,
+                null,
+                null);
+        return cursor;
+
+    }
+    public Cursor selectOwnerByName(String firstName, String lastName){
+        Cursor cursor = mDatabase.query(ParkingHelper.TABLE_OWNERS,
+                allOwnersColumns,
+                ParkingHelper.COLUMN_FIRST_NAME + " = ?" +
+                        " AND " + ParkingHelper.COLUMN_LAST_NAME + " = ?",
+                new String[]{firstName, lastName},
                 null,
                 null,
                 null,

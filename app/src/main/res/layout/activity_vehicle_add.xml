@@ -45,6 +45,14 @@
             app:flw_labelText="State"
             android:layout_marginBottom="15dp"/>
 
+        <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
+            android:id="@+id/vehicleMake"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:drawablePadding="10dp"
+            app:flw_labelText= "Vehicle Make" />
+
     <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
         android:id="@+id/vehicleModel"
         android:layout_width="match_parent"
@@ -53,13 +61,7 @@
         android:drawablePadding="10dp"
         app:flw_labelText="Vehicle Model" />
 
-    <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
-        android:id="@+id/vehicleMake"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:drawablePadding="10dp"
-        app:flw_labelText= "Vehicle Make" />
+
     <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
             android:id="@+id/yearText"
             android:layout_width="match_parent"

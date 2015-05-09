@@ -34,6 +34,7 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
     FloatingActionButton addCite;
     CitationsData mCitationsData;
     private int vehicleId;
+    private int ownerId;
 
     public static final String TAG = Citations.class.getSimpleName();
 
@@ -126,13 +127,11 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
                     mDataSource.open();
 
 
-
-
                     java.util.Date date = new java.util.Date();
                     String citeReason = citeReasonPicker.getSelectedItems().toString();
 
 
-                   mCitationsData = new CitationsData(1,
+                   mCitationsData = new CitationsData(ownerId,
                            officer.getInputWidgetText().toString(),
                            citeReason ,
                            date.getTime(),
