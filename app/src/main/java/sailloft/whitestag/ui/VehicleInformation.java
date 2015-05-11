@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -35,6 +36,8 @@ public class VehicleInformation extends ListActivity {
     private final String KEY_DATE = "date";
     private final String KEY_TYPE= "citeType";
     private static final String TAG = VehicleInformation.class.getSimpleName();
+    private TextView vehicleLabel;
+    private TextView ownerLabel;
 
 
     @Override
@@ -47,12 +50,15 @@ public class VehicleInformation extends ListActivity {
         mState = intent.getStringExtra(MainActivity.stateExtra);
 
         mParkingDataSource = new ParkingDataSource(VehicleInformation.this);
-
+        vehicleLabel = (TextView)findViewById(R.id.vehicleLabel);
+        ownerLabel = (TextView)findViewById(R.id.ownerLabelVI);
         final FloatingActionButton snapShot = (FloatingActionButton) findViewById(R.id.snapShotButton);
         snapShot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(VehicleInformation.this, SnapShot.class);
+                intent.putExtra("vehicleID", vehicleID);
+                intent.putExtra("ownerID", ownerId);
                 startActivity(intent);
             }
         });
@@ -81,7 +87,7 @@ public class VehicleInformation extends ListActivity {
 
         if (vehicle.getCount() <=0){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Unable to locate vehicle matching the plate. Do you want to add this vehicle?")
+            builder.setMessage("Unable to locate! Do you want to add this vehicle?")
                     .setTitle("Vehicle not found!")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
@@ -102,19 +108,26 @@ public class VehicleInformation extends ListActivity {
             });
             AlertDialog dialog = builder.create();
             dialog.show();
-            Toast.makeText(this,"Vehicle not found", Toast.LENGTH_LONG).show();
+
         }
         else {
             vehicle.moveToFirst();
 
             int i = vehicle.getColumnIndex(ParkingHelper.COLUMN_OWNER);
             int o = vehicle.getColumnIndex(ParkingHelper.COLUMN_ID);
+            int z = vehicle.getColumnIndex(ParkingHelper.COLUMN_PLATE_NUMBER);
 
+            vehicleLabel.setText("Vehicle: " + vehicle.getString(z));
 
             vehicleID = vehicle.getInt(o);
             ownerId = vehicle.getInt(i);
-            Log.e("VEHICLEID", Integer.toString(vehicleID));
+
             Cursor citations = mParkingDataSource.selectCitationsForVehicle(vehicleID);
+            Cursor owner = mParkingDataSource.selectVehicleOwner(ownerId);
+            owner.moveToFirst();
+            int q = owner.getColumnIndex(ParkingHelper.COLUMN_FIRST_NAME);
+            int w = owner.getColumnIndex(ParkingHelper.COLUMN_LAST_NAME);
+            ownerLabel.setText("Owner:  " + owner.getString(q) + " " + owner.getString(w));
 
             updateList(citations);
 
@@ -159,7 +172,7 @@ public class VehicleInformation extends ListActivity {
                 allCites.add(cites);
                 cursor.moveToNext();
             }
-            String[] keys = {KEY_DATE, KEY_TYPE};
+            String[] keys = {KEY_TYPE, KEY_DATE};
             int[] ids = {android.R.id.text1, android.R.id.text2};
             SimpleAdapter adapter = new SimpleAdapter(this, allCites,
                     android.R.layout.simple_list_item_2, keys, ids);

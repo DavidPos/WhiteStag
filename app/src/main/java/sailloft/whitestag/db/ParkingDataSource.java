@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 import sailloft.whitestag.model.CitationsData;
 import sailloft.whitestag.model.OwnerData;
+import sailloft.whitestag.model.SnapShotData;
 import sailloft.whitestag.model.VehicleData;
 
 /**
@@ -19,6 +20,7 @@ public class ParkingDataSource {
     private ParkingHelper mParkingHelper;
     private Context mContext;
     private String[] allOwnersColumns = {ParkingHelper.COLUMN_ID, ParkingHelper.COLUMN_FIRST_NAME, ParkingHelper.COLUMN_LAST_NAME, ParkingHelper.COLUMN_PERMITS, ParkingHelper.COLUMN_LOCATION, ParkingHelper.COLUMN_DEPARTMENT};
+    private String[] allSnapShot = {ParkingHelper.COLUMN_ID, ParkingHelper.COLUMN_VEHICLE, ParkingHelper.COLUMN_DATE_TIME, ParkingHelper.COLUMN_OWNER, ParkingHelper.COLUMN_LOCATION};
     private String[] allCitationColumns ={ParkingHelper.COLUMN_ID, ParkingHelper.COLUMN_CITATIONS_TYPE, ParkingHelper.COLUMN_OWNER,ParkingHelper.COLUMN_OFFICER, ParkingHelper.COLUMN_BOOT, ParkingHelper.COLUMN_DATE_TIME, ParkingHelper.COLUMN_VEHICLE, ParkingHelper.COLUMN_ADDITIONAL, ParkingHelper.COLUMN_LOCATION};
     public ParkingDataSource(Context context){
         mContext = context;
@@ -76,6 +78,22 @@ public class ParkingDataSource {
         }
 
 
+    }
+
+    public void insertSnapShot(SnapShotData snapShot) {
+        mDatabase.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(ParkingHelper.COLUMN_OWNER, snapShot.getOwnerId());
+            values.put(ParkingHelper.COLUMN_DATE_TIME, snapShot.getDateTime());
+            values.put(ParkingHelper.COLUMN_VEHICLE, snapShot.getVehicleId());
+            values.put(ParkingHelper.COLUMN_LOCATION, snapShot.getLocation());
+            mDatabase.insert(ParkingHelper.TABLE_VEHICLE_SNAPSHOT, null, values);
+            mDatabase.setTransactionSuccessful();
+        }
+        finally {
+            mDatabase.endTransaction();
+        }
     }
 
     public void insertCitations(CitationsData citationsData){
@@ -136,7 +154,7 @@ public class ParkingDataSource {
 
     public Cursor selectVehicleOwner(int ownerId){
         Cursor cursor = mDatabase.query(
-                ParkingHelper.TABLE_VEHICLES,
+                ParkingHelper.TABLE_OWNERS,
                 allOwnersColumns,
                 ParkingHelper.COLUMN_ID +" = ?",
                 new String[]{Integer.toString(ownerId)},
@@ -172,18 +190,7 @@ public class ParkingDataSource {
                 null);
         return cursor;
     }
-    public Cursor selectOwner(int ownerId){
-        Cursor cursor = mDatabase.query(ParkingHelper.TABLE_OWNERS,
-                null,
-                ParkingHelper.COLUMN_ID + " = ?",
-                new String[]{Integer.toString(ownerId)},
-                null,
-                null,
-                null,
-                null);
-        return cursor;
 
-    }
     public Cursor selectOwnerByName(String firstName, String lastName){
         Cursor cursor = mDatabase.query(ParkingHelper.TABLE_OWNERS,
                 allOwnersColumns,
@@ -196,6 +203,17 @@ public class ParkingDataSource {
                 null);
         return cursor;
 
+    }
+    public Cursor snapShotByVehicleId(int vehicleId){
+        Cursor cursor = mDatabase.query(ParkingHelper.TABLE_VEHICLE_SNAPSHOT,
+                allSnapShot,
+                ParkingHelper.COLUMN_VEHICLE + " = ?",
+                new String[]{Integer.toString(vehicleId)},
+                null,
+                null,
+                null,
+                null);
+        return cursor;
     }
     //update
 

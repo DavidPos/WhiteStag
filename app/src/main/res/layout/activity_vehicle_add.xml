@@ -54,7 +54,7 @@
             app:flw_labelText= "Vehicle Make" />
 
     <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
-        android:id="@+id/vehicleModel"
+        android:id="@+id/vehicleModelSnap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"

@@ -10,21 +10,15 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 tools:context="sailloft.whitestag.ui.SnapShot">
 
-    <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
-        android:id="@+id/vehicleMakeModel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:drawablePadding="10dp"
-        app:flw_labelText="Make and Model"
-        android:layout_below="@+id/locationPicker"/>
+
 
     <com.marvinlabs.widget.floatinglabel.itempicker.FloatingLabelItemPicker
         android:id="@+id/locationPicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        app:flw_labelText="Location" />
+        app:flw_labelText="Location"
+        android:layout_centerInParent="true"/>
     <com.getbase.floatingactionbutton.AddFloatingActionButton
         android:id="@+id/addSnapButton"
         android:layout_width="wrap_content"
@@ -38,5 +32,15 @@
         android:layout_marginBottom="16dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SnapShot"
+        android:id="@+id/snapLabel"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="24sp"
+        android:textColor="@android:color/black"/>
 
 </RelativeLayout>

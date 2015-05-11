@@ -41,7 +41,7 @@ public class VehicleAdd extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle_add);
         plateNumber = (FloatingLabelEditText)findViewById(R.id.plateInfo);
-        vehicleModel =(FloatingLabelEditText)findViewById(R.id.vehicleModel) ;
+        vehicleModel =(FloatingLabelEditText)findViewById(R.id.vehicleModelSnap) ;
         vehicleMake =(FloatingLabelEditText)findViewById(R.id.vehicleMake) ;
         vehicleYear = (FloatingLabelEditText)findViewById(R.id.yearText);
         vehicleOwner =(FloatingLabelEditText)findViewById(R.id.vehicleOwner);
@@ -80,13 +80,8 @@ public class VehicleAdd extends ActionBarActivity {
                 public void onClick(View v) {
                    String[] name = vehicleOwner.getInputWidgetText().toString().split(" ");
                     Log.e("STRING:" , name[0] + ":" + name[1]);
-
                     Cursor owner = mParkingDataSource.selectOwnerByName(name[0].replaceAll("\\s+",""),name[1].replaceAll("\\s+",""));
-                   /* for (int i=1; i<owner.getColumnCount(); i++ ){
-                        columns = columns + ", " +owner.getColumnName(i);
-                    }*/
-
-                    if(owner.getCount() <=0){
+                 if(owner.getCount() <=0){
                         Intent intent = new Intent(VehicleAdd.this, OwnerAdd.class);
                         intent.putExtra("first", name[0]);
                         intent.putExtra("last", name[1]);
@@ -95,7 +90,7 @@ public class VehicleAdd extends ActionBarActivity {
                     }
                     else {
                         if (ownerId <= 0) {
-                            //int i = owner.getColumnIndex();
+
                             owner.moveToFirst();
                             ownerId = owner.getInt(0);
                         }

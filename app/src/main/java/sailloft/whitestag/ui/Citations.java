@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText;
@@ -140,6 +141,7 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
                            addInfo.getInputWidgetText().toString(),
                            locationPicker.getInputWidget().getText().toString());
                     mDataSource.insertCitations(mCitationsData);
+                        Toast.makeText(Citations.this, "Citation added!", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(Citations.this,MainActivity.class);
                         startActivity(intent);
 
