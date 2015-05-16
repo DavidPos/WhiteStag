@@ -130,6 +130,12 @@ public class VehicleInformation extends ListActivity {
             ownerLabel.setText("Owner:  " + owner.getString(q) + " " + owner.getString(w));
 
             updateList(citations);
+            ownerLabel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
 
         }
 

@@ -50,12 +50,17 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
             @Override
             public void onClick(View v) {
                 mPlate = plate.getInputWidgetText().toString();
+                mPlate = mPlate.toUpperCase();
                 mState = statePicker.getSelectedItems().toString();
+
 
                 Intent intent = new Intent(MainActivity.this, VehicleInformation.class);
                 intent.putExtra(plateExtra, mPlate);
                 intent.putExtra(stateExtra, mState);
+                plate.setInputWidgetText("");
+                statePicker.setSelectedIndices(null);
                 startActivity(intent);
+
 
             }
         });

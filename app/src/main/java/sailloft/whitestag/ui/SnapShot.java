@@ -14,8 +14,10 @@ import com.marvinlabs.widget.floatinglabel.itempicker.ItemPickerListener;
 import com.marvinlabs.widget.floatinglabel.itempicker.StringPickerDialogFragment;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 import sailloft.whitestag.R;
 import sailloft.whitestag.db.ParkingDataSource;
@@ -86,11 +88,12 @@ public class SnapShot extends ActionBarActivity implements ItemPickerListener<St
         addSnap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                java.util.Date date = new java.util.Date();
+                DateFormat dateFormat = DateFormat.getDateTimeInstance();
+
                 mSnapShotData = new SnapShotData(ownerId,
-                        date.getTime(),
-                        vehicleId,
-                        locationPicker.getInputWidget().getText().toString());
+                        dateFormat.format(new Date()),
+                               vehicleId,
+                               locationPicker.getInputWidget().getText().toString());
                 mParkingDataSource.insertSnapShot(mSnapShotData);
                 Toast.makeText(SnapShot.this, "Vehicle added to SnapShot", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(SnapShot.this, MainActivity.class);

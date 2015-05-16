@@ -7,11 +7,11 @@ import java.io.Serializable;
  */
 public class SnapShotData implements Serializable {
     private int ownerId;
-    private long dateTime;
+    private String dateTime;
     private int vehicleId;
     private String mLocation;
 
-    public SnapShotData(int owner, long date, int vehicle, String location){
+    public SnapShotData(int owner, String date, int vehicle, String location){
         ownerId = owner;
         dateTime = date;
         vehicleId = vehicle;
@@ -34,11 +34,11 @@ public class SnapShotData implements Serializable {
         this.vehicleId = vehicleId;
     }
 
-    public long getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(int dateTime) {
+    public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
 

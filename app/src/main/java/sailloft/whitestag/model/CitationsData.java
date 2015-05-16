@@ -11,13 +11,13 @@ public class CitationsData implements Serializable{
     private int mOwner;
     private String mOfficer;
     private String mCitationType;
-    private long mTimeDate;
+    private String mTimeDate;
     private int mBoot;
     private int mVehicle;
     private String mAddInfo;
     private String mLocation;
 
-    public CitationsData(int owner, String officer, String citationType, long timeDate, int boot, int vehicle, String addInfo, String location){
+    public CitationsData(int owner, String officer, String citationType, String timeDate, int boot, int vehicle, String addInfo, String location){
 
         mOwner = owner;
         mOfficer = officer;
@@ -55,11 +55,11 @@ public class CitationsData implements Serializable{
         mCitationType = citationType;
     }
 
-    public long getTimeDate() {
+    public String getTimeDate() {
         return mTimeDate;
     }
 
-    public void setTimeDate(long timeDate) {
+    public void setTimeDate(String timeDate) {
         mTimeDate = timeDate;
     }
 

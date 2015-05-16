@@ -67,7 +67,7 @@ public class ParkingHelper extends SQLiteOpenHelper {
                     COLUMN_OWNER + " INTEGER, " +
                     COLUMN_OFFICER + " TEXT, " +
                     COLUMN_BOOT + " INTEGER, " +
-                    COLUMN_DATE_TIME + " INTEGER, " +
+                    COLUMN_DATE_TIME + " TEXT, " +
                     COLUMN_VEHICLE + " INTEGER, " +
                     COLUMN_ADDITIONAL + " TEXT, "+
                     COLUMN_LOCATION + " TEXT)";
@@ -76,7 +76,7 @@ public class ParkingHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + TABLE_VEHICLE_SNAPSHOT + " ("+
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COLUMN_OWNER + " INTEGER, " +
-                    COLUMN_DATE_TIME + " INTEGER, " +
+                    COLUMN_DATE_TIME + " TEXT, " +
                     COLUMN_VEHICLE + " INTEGER, "+
                     COLUMN_LOCATION + " TEXT)";
 
