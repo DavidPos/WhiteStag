@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ public class VehicleInformation extends ListActivity {
     private static final String TAG = VehicleInformation.class.getSimpleName();
     private TextView vehicleLabel;
     private TextView ownerLabel;
+    private ListView mListView;
 
 
     @Override
@@ -52,6 +54,8 @@ public class VehicleInformation extends ListActivity {
         mParkingDataSource = new ParkingDataSource(VehicleInformation.this);
         vehicleLabel = (TextView)findViewById(R.id.vehicleLabel);
         ownerLabel = (TextView)findViewById(R.id.ownerLabelVI);
+
+
         final FloatingActionButton snapShot = (FloatingActionButton) findViewById(R.id.snapShotButton);
         snapShot.setOnClickListener(new View.OnClickListener() {
             @Override
