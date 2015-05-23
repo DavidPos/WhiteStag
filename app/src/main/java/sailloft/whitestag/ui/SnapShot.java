@@ -14,7 +14,7 @@ import com.marvinlabs.widget.floatinglabel.itempicker.ItemPickerListener;
 import com.marvinlabs.widget.floatinglabel.itempicker.StringPickerDialogFragment;
 
 import java.sql.SQLException;
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -88,10 +88,10 @@ public class SnapShot extends ActionBarActivity implements ItemPickerListener<St
         addSnap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DateFormat dateFormat = DateFormat.getDateTimeInstance();
+                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm");
 
                 mSnapShotData = new SnapShotData(ownerId,
-                        dateFormat.format(new Date()),
+                        sdf.format(new Date()),
                                vehicleId,
                                locationPicker.getInputWidget().getText().toString());
                 mParkingDataSource.insertSnapShot(mSnapShotData);

@@ -17,6 +17,7 @@ import java.sql.SQLException;
 
 import sailloft.whitestag.R;
 import sailloft.whitestag.db.ParkingDataSource;
+import sailloft.whitestag.model.OwnerData;
 import sailloft.whitestag.model.VehicleData;
 
 
@@ -33,7 +34,7 @@ public class VehicleAdd extends ActionBarActivity {
     private FloatingActionButton addVehicle;
     private VehicleData mVehicle;
     private int ownerId = 0;
-    private String columns;
+    private OwnerData mOwner;
 
 
     @Override
@@ -78,35 +79,53 @@ public class VehicleAdd extends ActionBarActivity {
             addVehicle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   String[] name = vehicleOwner.getInputWidgetText().toString().split(" ");
-                    Log.e("STRING:" , name[0] + ":" + name[1]);
-                    Cursor owner = mParkingDataSource.selectOwnerByName(name[0].replaceAll("\\s+",""),name[1].replaceAll("\\s+",""));
-                 if(owner.getCount() <=0){
-                        Intent intent = new Intent(VehicleAdd.this, OwnerAdd.class);
-                        intent.putExtra("first", name[0]);
-                        intent.putExtra("last", name[1]);
-                        startActivityForResult(intent, 2);
+                    if (vehicleOwner.getInputWidgetText().toString().equals("")){
+                        mOwner = new OwnerData(null, null, null, null, null);
 
-                    }
-                    else {
-                        if (ownerId <= 0) {
-
-                            owner.moveToFirst();
-                            ownerId = owner.getInt(0);
-                        }
                         mVehicle = new VehicleData(vehicleMake.getInputWidgetText().toString(),
                                 vehicleModel.getInputWidgetText().toString(),
                                 plateNumber.getInputWidgetText().toString(),
                                 state.getInputWidgetText().toString(),
                                 vehicleYear.getInputWidgetText().toString(),
-                                ownerId);
+                                (int)mParkingDataSource.insertOwnerReturnId(mOwner));
                         mParkingDataSource.insertVehicle(mVehicle);
                         Intent intent = new Intent(VehicleAdd.this, VehicleInformation.class);
                         intent.putExtra(MainActivity.plateExtra, plateNumber.getInputWidgetText().toString());
                         intent.putExtra(MainActivity.stateExtra, state.getInputWidgetText().toString());
                         startActivity(intent);
-                    }
 
+
+
+                    }
+                    else {
+                        String[] name = vehicleOwner.getInputWidgetText().toString().split(" ");
+                        Log.e("STRING:", name[0] + ":" + name[1]);
+                        Cursor owner = mParkingDataSource.selectOwnerByName(name[0].replaceAll("\\s+", ""), name[1].replaceAll("\\s+", ""));
+                        if (owner.getCount() <= 0) {
+                            Intent intent = new Intent(VehicleAdd.this, OwnerAdd.class);
+                            intent.putExtra("first", name[0]);
+                            intent.putExtra("last", name[1]);
+                            startActivityForResult(intent, 2);
+
+                        } else {
+                            if (ownerId <= 0) {
+
+                                owner.moveToFirst();
+                                ownerId = owner.getInt(0);
+                            }
+                            mVehicle = new VehicleData(vehicleMake.getInputWidgetText().toString(),
+                                    vehicleModel.getInputWidgetText().toString(),
+                                    plateNumber.getInputWidgetText().toString(),
+                                    state.getInputWidgetText().toString(),
+                                    vehicleYear.getInputWidgetText().toString(),
+                                    ownerId);
+                            mParkingDataSource.insertVehicle(mVehicle);
+                            Intent intent = new Intent(VehicleAdd.this, VehicleInformation.class);
+                            intent.putExtra(MainActivity.plateExtra, plateNumber.getInputWidgetText().toString());
+                            intent.putExtra(MainActivity.stateExtra, state.getInputWidgetText().toString());
+                            startActivity(intent);
+                        }
+                    }
                 }
             });
 
@@ -114,6 +133,7 @@ public class VehicleAdd extends ActionBarActivity {
             e.printStackTrace();
         }
     }
+
 
     @Override
     protected void onPause() {

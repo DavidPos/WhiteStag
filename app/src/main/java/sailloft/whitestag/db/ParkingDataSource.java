@@ -52,6 +52,7 @@ public class ParkingDataSource {
             values.put(ParkingHelper.COLUMN_YEAR, vehicle.getYear());
             mDatabase.insert(ParkingHelper.TABLE_VEHICLES, null, values);
             mDatabase.setTransactionSuccessful();
+
         }
         finally {
             mDatabase.endTransaction();
@@ -61,6 +62,7 @@ public class ParkingDataSource {
 
     public void insertOwner(OwnerData ownerData){
         mDatabase.beginTransaction();
+
         try {
             ContentValues values = new ContentValues();
 
@@ -77,6 +79,30 @@ public class ParkingDataSource {
 
         }
 
+
+
+    }
+    public long insertOwnerReturnId(OwnerData ownerData){
+        mDatabase.beginTransaction();
+        long row = 0;
+
+        try {
+            ContentValues values = new ContentValues();
+
+            values.put(ParkingHelper.COLUMN_FIRST_NAME, ownerData.getFirstName());
+            values.put(ParkingHelper.COLUMN_LAST_NAME, ownerData.getLastName());
+            values.put(ParkingHelper.COLUMN_PERMITS, ownerData.getPermit());
+            values.put(ParkingHelper.COLUMN_LOCATION, ownerData.getWorkLocation());
+            values.put(ParkingHelper.COLUMN_DEPARTMENT, ownerData.getDepartment());
+            row = mDatabase.insert(ParkingHelper.TABLE_OWNERS, null, values);
+            mDatabase.setTransactionSuccessful();
+        }
+        finally {
+            mDatabase.endTransaction();
+
+        }
+
+        return row;
 
     }
 

@@ -16,10 +16,11 @@ import com.marvinlabs.widget.floatinglabel.itempicker.ItemPickerListener;
 import com.marvinlabs.widget.floatinglabel.itempicker.StringPickerDialogFragment;
 
 import java.sql.SQLException;
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 
 import sailloft.whitestag.R;
 import sailloft.whitestag.db.ParkingDataSource;
@@ -129,8 +130,7 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
                     try {
                     mDataSource.open();
 
-
-                    DateFormat dateFormat = DateFormat.getDateTimeInstance();
+                        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm", Locale.US);
 
 
 
@@ -140,7 +140,7 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
                    mCitationsData = new CitationsData(ownerId,
                            officer.getInputWidgetText().toString(),
                            citeReason ,
-                           dateFormat.format(new Date()),
+                           sdf.format(new Date()),
                            0,
                            vehicleId,
                            addInfo.getInputWidgetText().toString(),

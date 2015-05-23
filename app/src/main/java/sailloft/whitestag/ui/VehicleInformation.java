@@ -10,20 +10,21 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 import sailloft.whitestag.R;
 import sailloft.whitestag.db.ParkingDataSource;
 import sailloft.whitestag.db.ParkingHelper;
+import sailloft.whitestag.ui.list.Header;
+import sailloft.whitestag.ui.list.Item;
+import sailloft.whitestag.ui.list.ListHeadersAdapter;
+import sailloft.whitestag.ui.list.ListItem;
 
 
 public class VehicleInformation extends ListActivity {
@@ -34,12 +35,14 @@ public class VehicleInformation extends ListActivity {
     private String mPlate;
     private int vehicleID;
     private int ownerId;
-    private final String KEY_DATE = "date";
-    private final String KEY_TYPE= "citeType";
+    public final String KEY_DATE = "date";
+    public final String KEY_TYPE= "citeType";
+    public final String KEY_LOC = "location";
     private static final String TAG = VehicleInformation.class.getSimpleName();
     private TextView vehicleLabel;
     private TextView ownerLabel;
-    private ListView mListView;
+
+    private List<Item> items;
 
 
     @Override
@@ -47,6 +50,8 @@ public class VehicleInformation extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle_information);
         Intent intent = getIntent();
+         items = new ArrayList<Item>();
+
 
         mPlate = intent.getStringExtra(MainActivity.plateExtra);
         mState = intent.getStringExtra(MainActivity.stateExtra);
@@ -54,6 +59,11 @@ public class VehicleInformation extends ListActivity {
         mParkingDataSource = new ParkingDataSource(VehicleInformation.this);
         vehicleLabel = (TextView)findViewById(R.id.vehicleLabel);
         ownerLabel = (TextView)findViewById(R.id.ownerLabelVI);
+
+
+
+
+
 
 
         final FloatingActionButton snapShot = (FloatingActionButton) findViewById(R.id.snapShotButton);
@@ -128,19 +138,58 @@ public class VehicleInformation extends ListActivity {
 
             Cursor citations = mParkingDataSource.selectCitationsForVehicle(vehicleID);
             Cursor owner = mParkingDataSource.selectVehicleOwner(ownerId);
-            owner.moveToFirst();
-            int q = owner.getColumnIndex(ParkingHelper.COLUMN_FIRST_NAME);
-            int w = owner.getColumnIndex(ParkingHelper.COLUMN_LAST_NAME);
-            ownerLabel.setText("Owner:  " + owner.getString(q) + " " + owner.getString(w));
+            Cursor snap = mParkingDataSource.snapShotByVehicleId(vehicleID);
+            if (snap != null && citations != null) {
+                owner.moveToFirst();
+                int q = owner.getColumnIndex(ParkingHelper.COLUMN_FIRST_NAME);
+                int w = owner.getColumnIndex(ParkingHelper.COLUMN_LAST_NAME);
+                ownerLabel.setText("Owner:  " + owner.getString(q) + " " + owner.getString(w));
 
-            updateList(citations);
-            ownerLabel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                updateList(citations, snap);
+            } else {
+                if (snap != null) {
+                    items.add(new Header("SNAPSHOT"));
+                    snap.moveToFirst();
 
+                    while (!snap.isAfterLast()) {
+                        int intDate = snap.getColumnIndex(ParkingHelper.COLUMN_DATE_TIME);
+                        int intLoc = snap.getColumnIndex(ParkingHelper.COLUMN_LOCATION);
+                        String date = snap.getString(intDate);
+                        String location = snap.getString(intLoc);
+
+                        items.add(new ListItem(location, date));
+
+                        snap.moveToNext();
+                    }
+                    ListHeadersAdapter adapter = new ListHeadersAdapter(this,items);
+                    setListAdapter(adapter);
+
+                } if (citations != null){
+                    citations.moveToFirst();
+                    items.add(new Header("CITATIONS"));
+                    while (!citations.isAfterLast()) {
+
+                        int citDate = citations.getColumnIndex(ParkingHelper.COLUMN_DATE_TIME);
+                        int citType = citations.getColumnIndex(ParkingHelper.COLUMN_CITATIONS_TYPE);
+                        String date = citations.getString(citDate);
+                        String cite = citations.getString(citType);
+
+                        items.add(new ListItem(date, cite));
+
+
+                        citations.moveToNext();
+
+                    }
+                    ListHeadersAdapter adapter = new ListHeadersAdapter(this, items);
+                    setListAdapter(adapter);
                 }
-            });
 
+
+              if (citations == null && snap == null){
+                 Log.i(TAG,"No citations");
+              }
+
+            }
         }
 
 
@@ -148,44 +197,45 @@ public class VehicleInformation extends ListActivity {
     }
 
     @Override
-    protected void onPause() {
+    protected void onPause(){
         super.onPause();
         mParkingDataSource.close();
     }
-    protected void updateList(Cursor cursor){
-        cursor.moveToFirst();
-        if (cursor.getCount() <=0){
-            Toast.makeText(this,"Vehicle has no citations", Toast.LENGTH_LONG).show();
+    protected void updateList(Cursor cites, Cursor snaps){
+        snaps.moveToFirst();
+        cites.moveToFirst();
 
-        }else {
             Log.e("START", "START Of LIST");
             //get vehicle id number from vehicle table
             //search citiations table for all citiations with the vehicle id
             //display in list
             //search snapshot table for all occurences of vehicle id
             //display in list
-            ArrayList<HashMap<String, String>> allCites =
-                    new ArrayList<HashMap<String, String>>();
-            while (!cursor.isAfterLast()) {
-                //do stuff
-                int i = cursor.getColumnIndex(ParkingHelper.COLUMN_DATE_TIME);
-                int z = cursor.getColumnIndex(ParkingHelper.COLUMN_CITATIONS_TYPE);
-                Integer date = cursor.getInt(i);
-                java.util.Date time = new java.util.Date((long) date * 1000);
-                String conDate = time.toString();
-                String cite = cursor.getString(z);
-                Log.e("CITATION", conDate + cite);
 
-                HashMap<String, String> cites = new HashMap<String, String>();
-                cites.put(KEY_DATE, conDate);
-                cites.put(KEY_TYPE, cite);
-                allCites.add(cites);
-                cursor.moveToNext();
+            items.add(new Header("CITATIONS"));
+            while (!cites.isAfterLast()) {
+                //do stuff
+                int i = cites.getColumnIndex(ParkingHelper.COLUMN_DATE_TIME);
+                int z = cites.getColumnIndex(ParkingHelper.COLUMN_CITATIONS_TYPE);
+                String date = cites.getString(i);
+
+                String cite = cites.getString(z);
+                items.add(new ListItem(cite, date));
+
+                cites.moveToNext();
             }
-            String[] keys = {KEY_TYPE, KEY_DATE};
-            int[] ids = {android.R.id.text1, android.R.id.text2};
-            SimpleAdapter adapter = new SimpleAdapter(this, allCites,
-                    android.R.layout.simple_list_item_2, keys, ids);
+            items.add(new Header("SNAPSHOT"));
+            while (!snaps.isAfterLast()){
+                int i = snaps.getColumnIndex(ParkingHelper.COLUMN_DATE_TIME);
+                int z = snaps.getColumnIndex(ParkingHelper.COLUMN_LOCATION);
+                String date = snaps.getString(i);
+                String location = snaps.getString(z);
+
+                items.add(new ListItem(location, date));
+                snaps.moveToNext();
+            }
+
+            ListHeadersAdapter adapter = new ListHeadersAdapter(this, items);
             setListAdapter(adapter);
 
 
@@ -193,7 +243,7 @@ public class VehicleInformation extends ListActivity {
 
 
 
-    }
+
 
 
 
