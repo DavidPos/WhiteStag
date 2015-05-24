@@ -97,6 +97,9 @@ public class VehicleInformation extends ListActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        Intent intent = getIntent();
+        mPlate = intent.getStringExtra("Plate");
+        mState = intent.getStringExtra("State");
        Cursor vehicle = mParkingDataSource.selectOneVehicleByPlate(mPlate, mState);
 
         if (vehicle.getCount() <=0){
@@ -191,7 +194,16 @@ public class VehicleInformation extends ListActivity {
 
             }
         }
-
+        ownerLabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VehicleInformation.this, OwnerEdit.class);
+                intent.putExtra("ownerId", ownerId);
+                intent.putExtra("Plate", mPlate);
+                intent.putExtra("State", mState);
+                startActivity(intent);
+            }
+        });
 
 
     }

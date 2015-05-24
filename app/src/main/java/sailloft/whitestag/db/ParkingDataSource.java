@@ -242,7 +242,24 @@ public class ParkingDataSource {
         return cursor;
     }
     //update
+    public int updateOwner(OwnerData ownerData, int ownerId){
+           ContentValues values = new ContentValues();
+            String whereClause = ParkingHelper.COLUMN_ID + " = ?";
+            values.put(ParkingHelper.COLUMN_FIRST_NAME, ownerData.getFirstName());
+            values.put(ParkingHelper.COLUMN_LAST_NAME, ownerData.getLastName());
+            values.put(ParkingHelper.COLUMN_PERMITS, ownerData.getPermit());
+            values.put(ParkingHelper.COLUMN_LOCATION, ownerData.getWorkLocation());
+            values.put(ParkingHelper.COLUMN_DEPARTMENT, ownerData.getDepartment());
+            int rowsUpdated = mDatabase.update(ParkingHelper.TABLE_OWNERS,
+                    values,//Values
+                    whereClause,//Where
+                    new String[]{Integer.toString(ownerId)});//Where params
 
+        return rowsUpdated;
+
+
+
+    }
     //delete
 
 }
