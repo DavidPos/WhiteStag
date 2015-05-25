@@ -1,4 +1,4 @@
-package sailloft.whitestag.ui.list;
+package sailloft.whitestag.ui.vehicleInfoList;
 
 import android.view.LayoutInflater;
 import android.view.View;

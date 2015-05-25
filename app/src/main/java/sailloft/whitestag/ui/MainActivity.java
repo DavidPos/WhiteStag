@@ -52,6 +52,9 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
                 mPlate = plate.getInputWidgetText().toString();
                 mPlate = mPlate.toUpperCase();
                 mState = statePicker.getSelectedItems().toString();
+                mState =  mState.replaceAll("\\W","");
+                mState = mState.replaceAll("\\s","");
+
 
 
                 Intent intent = new Intent(MainActivity.this, VehicleInformation.class);

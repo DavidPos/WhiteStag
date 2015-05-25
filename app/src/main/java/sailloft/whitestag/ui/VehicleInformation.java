@@ -21,10 +21,10 @@ import java.util.List;
 import sailloft.whitestag.R;
 import sailloft.whitestag.db.ParkingDataSource;
 import sailloft.whitestag.db.ParkingHelper;
-import sailloft.whitestag.ui.list.Header;
-import sailloft.whitestag.ui.list.Item;
-import sailloft.whitestag.ui.list.ListHeadersAdapter;
-import sailloft.whitestag.ui.list.ListItem;
+import sailloft.whitestag.ui.vehicleInfoList.Header;
+import sailloft.whitestag.ui.vehicleInfoList.Item;
+import sailloft.whitestag.ui.vehicleInfoList.ListHeadersAdapter;
+import sailloft.whitestag.ui.vehicleInfoList.ListItem;
 
 
 public class VehicleInformation extends ListActivity {
@@ -215,7 +215,7 @@ public class VehicleInformation extends ListActivity {
         snaps.moveToFirst();
         cites.moveToFirst();
 
-            Log.e("START", "START Of LIST");
+
             //get vehicle id number from vehicle table
             //search citiations table for all citiations with the vehicle id
             //display in list
