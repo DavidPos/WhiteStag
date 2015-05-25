@@ -52,19 +52,24 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
                 mPlate = plate.getInputWidgetText().toString();
                 mPlate = mPlate.toUpperCase();
                 mState = statePicker.getSelectedItems().toString();
-                mState =  mState.replaceAll("\\W","");
-                mState = mState.replaceAll("\\s","");
+                mState = mState.replaceAll("\\W", "");
+                mState = mState.replaceAll("\\s", "");
+
+                if (mState.isEmpty() && mPlate.isEmpty()) {
+                    Intent intent = new Intent(MainActivity.this, VehicleList.class);
+                    startActivity(intent);
+                } else {
 
 
+                    Intent intent = new Intent(MainActivity.this, VehicleInformation.class);
+                    intent.putExtra(plateExtra, mPlate);
+                    intent.putExtra(stateExtra, mState);
+                    plate.setInputWidgetText("");
+                    statePicker.setSelectedIndices(null);
+                    startActivity(intent);
 
-                Intent intent = new Intent(MainActivity.this, VehicleInformation.class);
-                intent.putExtra(plateExtra, mPlate);
-                intent.putExtra(stateExtra, mState);
-                plate.setInputWidgetText("");
-                statePicker.setSelectedIndices(null);
-                startActivity(intent);
 
-
+                }
             }
         });
         statePicker = (FloatingLabelItemPicker<String>)findViewById(R.id.statePicker);

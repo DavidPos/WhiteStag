@@ -27,8 +27,10 @@ public class VehicleList extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_vehicle_list);
         allVehicles = new ArrayList<>();
+        mParkingDataSource = new ParkingDataSource(VehicleList.this);
 
     }
     @Override
@@ -40,7 +42,7 @@ public class VehicleList extends ListActivity {
             e.printStackTrace();
         }
         Cursor cursor = mParkingDataSource.selectAllVehicles();
-
+        cursor.moveToFirst();
         while(!cursor.isAfterLast()){
             //do stuff
 
