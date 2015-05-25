@@ -63,6 +63,14 @@
             android:name=".ui.OwnerEdit"
             android:label="@string/title_activity_owner_edit" >
         </activity>
+        <activity
+            android:name=".ui.VehicleList"
+            android:label="@string/title_activity_vehicle_list"
+            android:parentActivityName=".ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sailloft.whitestag.ui.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

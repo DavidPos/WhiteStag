@@ -43,7 +43,7 @@
         android:layout_below="@+id/ownerLabelVI"
         android:layout_centerInParent="true"
         android:footerDividersEnabled="true"
-        android:visibility="invisible"/>
+        />
 
     <TextView
         android:layout_width="wrap_content"
