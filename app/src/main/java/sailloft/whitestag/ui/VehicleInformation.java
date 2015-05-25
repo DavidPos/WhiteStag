@@ -35,9 +35,7 @@ public class VehicleInformation extends ListActivity {
     private String mPlate;
     private int vehicleID;
     private int ownerId;
-    public final String KEY_DATE = "date";
-    public final String KEY_TYPE= "citeType";
-    public final String KEY_LOC = "location";
+
     private static final String TAG = VehicleInformation.class.getSimpleName();
     private TextView vehicleLabel;
     private TextView ownerLabel;
@@ -87,6 +85,17 @@ public class VehicleInformation extends ListActivity {
                 startActivity(intent);
             }
         });
+
+        ownerLabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VehicleInformation.this, OwnerEdit.class);
+                intent.putExtra("ownerId", ownerId);
+                intent.putExtra(MainActivity.plateExtra, mPlate);
+                intent.putExtra(MainActivity.stateExtra, mState);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -97,9 +106,7 @@ public class VehicleInformation extends ListActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Intent intent = getIntent();
-        mPlate = intent.getStringExtra("Plate");
-        mState = intent.getStringExtra("State");
+
        Cursor vehicle = mParkingDataSource.selectOneVehicleByPlate(mPlate, mState);
 
         if (vehicle.getCount() <=0){
@@ -194,16 +201,7 @@ public class VehicleInformation extends ListActivity {
 
             }
         }
-        ownerLabel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(VehicleInformation.this, OwnerEdit.class);
-                intent.putExtra("ownerId", ownerId);
-                intent.putExtra("Plate", mPlate);
-                intent.putExtra("State", mState);
-                startActivity(intent);
-            }
-        });
+
 
 
     }

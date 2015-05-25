@@ -38,8 +38,8 @@ public class OwnerEdit extends ActionBarActivity {
         setContentView(R.layout.activity_owner_edit);
         Intent intent = getIntent();
         ownerID = intent.getIntExtra("ownerId", -1);
-        mPlate = intent.getStringExtra("Plate");
-        mState = intent.getStringExtra("State");
+        mPlate = intent.getStringExtra(MainActivity.plateExtra);
+        mState = intent.getStringExtra(MainActivity.stateExtra);
 
 
         mFirstName = (FloatingLabelEditText)findViewById(R.id.firstNameOwner);
@@ -88,8 +88,9 @@ public class OwnerEdit extends ActionBarActivity {
 
 
                 Intent intent = new Intent(OwnerEdit.this, VehicleInformation.class);
-                intent.putExtra("Plate", mPlate);
-                intent.putExtra("State", mState);
+
+                intent.putExtra(MainActivity.plateExtra, mPlate);
+                intent.putExtra(MainActivity.stateExtra, mState);
                startActivity(intent);
 
 
