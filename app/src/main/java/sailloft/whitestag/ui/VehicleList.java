@@ -41,22 +41,52 @@ public class VehicleList extends ListActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Cursor cursor = mParkingDataSource.selectAllVehicles();
-        cursor.moveToFirst();
-        while(!cursor.isAfterLast()){
-            //do stuff
+        Intent intent = getIntent();
+        if (intent.getStringExtra(MainActivity.stateExtra).isEmpty()) {
+            Cursor cursor = mParkingDataSource.selectAllVehicles();
+            updateList(cursor);
 
-            int i = cursor.getColumnIndex(ParkingHelper.COLUMN_PLATE_NUMBER);
-            int z = cursor.getColumnIndex(ParkingHelper.COLUMN_PLATE_STATE);
-            String plate = cursor.getString(i);
-            String state = cursor.getString(z);
+
+        } else {
+            Cursor cursor = mParkingDataSource.selectAllVehiclesByState(intent.getStringExtra(MainActivity.stateExtra));
+            updateList(cursor);
+        }
+    }
+        @Override
+        protected void onPause () {
+            super.onPause();
+            mParkingDataSource.close();
+        }
+
+        @Override
+        public void onListItemClick (ListView l, View v,int position, long id){
+            super.onListItemClick(l, v, position, id);
+            HashMap vehicle = allVehicles.get(position);
+            String plate = (String) vehicle.get(KEY_PLATE);
+            String state = (String) vehicle.get(KEY_STATE);
+            allVehicles.clear();
+            Intent intent = new Intent(VehicleList.this, VehicleInformation.class);
+            intent.putExtra(MainActivity.plateExtra, plate);
+            intent.putExtra(MainActivity.stateExtra, state);
+            startActivity(intent);
+        }
+
+
+    protected void updateList(Cursor vehicles){
+        vehicles.moveToFirst();
+        while (!vehicles.isAfterLast()) {
+
+            int i = vehicles.getColumnIndex(ParkingHelper.COLUMN_PLATE_NUMBER);
+            int z = vehicles.getColumnIndex(ParkingHelper.COLUMN_PLATE_STATE);
+            String plate = vehicles.getString(i);
+            String state = vehicles.getString(z);
 
 
             HashMap<String, String> vehicle = new HashMap<String, String>();
             vehicle.put(KEY_PLATE, plate);
             vehicle.put(KEY_STATE, state);
             allVehicles.add(vehicle);
-            cursor.moveToNext();
+            vehicles.moveToNext();
         }
         String[] keys = {KEY_PLATE, KEY_STATE};
         int[] ids = {android.R.id.text1, android.R.id.text2};
@@ -65,25 +95,10 @@ public class VehicleList extends ListActivity {
         setListAdapter(adapter);
 
 
+
+
     }
 
-    @Override
-    protected void onPause(){
-        super.onPause();
-        mParkingDataSource.close();
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id){
-        super.onListItemClick(l, v, position, id);
-        HashMap vehicle = allVehicles.get(position);
-        String plate = (String)vehicle.get(KEY_PLATE);
-        String state = (String)vehicle.get(KEY_STATE);
-        Intent intent = new Intent(VehicleList.this, VehicleInformation.class);
-        intent.putExtra(MainActivity.plateExtra, plate);
-        intent.putExtra(MainActivity.stateExtra, state);
-        startActivity(intent);
-    }
 
 
     @Override

@@ -88,6 +88,8 @@ public class OwnerEdit extends ActionBarActivity {
 
 
                 Intent intent = new Intent(OwnerEdit.this, VehicleInformation.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 intent.putExtra(MainActivity.plateExtra, mPlate);
                 intent.putExtra(MainActivity.stateExtra, mState);

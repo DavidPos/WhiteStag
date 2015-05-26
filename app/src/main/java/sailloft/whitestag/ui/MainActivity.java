@@ -57,8 +57,10 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
 
                 if (mState.isEmpty() && mPlate.isEmpty()) {
                     Intent intent = new Intent(MainActivity.this, VehicleList.class);
+                    plate.setInputWidgetText("");
+                    statePicker.setSelectedIndices(null);
                     startActivity(intent);
-                } else {
+                } else if(!mState.isEmpty() && !mPlate.isEmpty()) {
 
 
                     Intent intent = new Intent(MainActivity.this, VehicleInformation.class);
@@ -69,6 +71,12 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
                     startActivity(intent);
 
 
+                }else if (!mState.isEmpty() && mPlate.isEmpty()){
+                    Intent intent = new Intent(MainActivity.this, VehicleList.class);
+                    intent.putExtra(stateExtra, mState);
+                    plate.setInputWidgetText("");
+                    statePicker.setSelectedIndices(null);
+                    startActivity(intent);
                 }
             }
         });

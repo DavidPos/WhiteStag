@@ -160,6 +160,20 @@ public class ParkingDataSource {
 
 
     }
+    public Cursor selectAllVehiclesByState(String state){
+        Cursor cursor = mDatabase.query(
+                ParkingHelper.TABLE_VEHICLES,//table
+                new String[]{ParkingHelper.COLUMN_ID, ParkingHelper.COLUMN_PLATE_NUMBER,ParkingHelper.COLUMN_PLATE_STATE, ParkingHelper.COLUMN_MAKE, ParkingHelper.COLUMN_MODEL, ParkingHelper.COLUMN_OWNER},//column names
+                ParkingHelper.COLUMN_PLATE_STATE + " = ?",//where clause
+                new String[]{state},//where params
+                null,//groupby
+                null,//having
+                null//orderby
+        );
+        return cursor;
+
+
+    }
 
     public Cursor selectOneVehicleByPlate(String plate, String plateState){
 
@@ -190,6 +204,8 @@ public class ParkingDataSource {
                 null);
         return cursor;
     }
+
+
 
     public Cursor selectCitationsForVehicle(int vehicleId){
         Cursor cursor = mDatabase.query(
