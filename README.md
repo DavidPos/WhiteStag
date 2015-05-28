@@ -1,2 +1,2 @@
 # WhiteStag
-Android parking management app. It allows the you track vehicles and issue citations.
+Android parking management app. It allows the user you track vehicles and issue citations.
