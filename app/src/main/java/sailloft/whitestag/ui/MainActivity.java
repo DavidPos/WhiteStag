@@ -57,6 +57,7 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
 
                 if (mState.isEmpty() && mPlate.isEmpty()) {
                     Intent intent = new Intent(MainActivity.this, VehicleList.class);
+
                     plate.setInputWidgetText("");
                     statePicker.setSelectedIndices(null);
                     startActivity(intent);
@@ -66,6 +67,8 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
                     Intent intent = new Intent(MainActivity.this, VehicleInformation.class);
                     intent.putExtra(plateExtra, mPlate);
                     intent.putExtra(stateExtra, mState);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     plate.setInputWidgetText("");
                     statePicker.setSelectedIndices(null);
                     startActivity(intent);

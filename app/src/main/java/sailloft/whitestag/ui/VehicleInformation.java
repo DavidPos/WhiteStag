@@ -71,6 +71,8 @@ public class VehicleInformation extends ListActivity {
                 Intent intent = new Intent(VehicleInformation.this, SnapShot.class);
                 intent.putExtra("vehicleID", vehicleID);
                 intent.putExtra("ownerID", ownerId);
+                intent.putExtra("Plate", mPlate);
+                intent.putExtra("State", mState);
                 startActivity(intent);
             }
         });
@@ -81,7 +83,9 @@ public class VehicleInformation extends ListActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(VehicleInformation.this, Citations.class);
                 intent.putExtra("vehicleID", vehicleID);
-                intent.putExtra("ownerID", ownerId);
+                intent.putExtra("Plate", mPlate);
+                intent.putExtra("State", mState);
+
                 startActivity(intent);
             }
         });
@@ -106,6 +110,9 @@ public class VehicleInformation extends ListActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        Intent intent = getIntent();
+        mPlate = intent.getStringExtra(MainActivity.plateExtra);
+        mState = intent.getStringExtra(MainActivity.stateExtra);
 
        Cursor vehicle = mParkingDataSource.selectOneVehicleByPlate(mPlate, mState);
 
@@ -119,6 +126,7 @@ public class VehicleInformation extends ListActivity {
                             Intent intent = new Intent(VehicleInformation.this,VehicleAdd.class);
                             intent.putExtra("Plate", mPlate);
                             intent.putExtra("State", mState);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             setResult(RESULT_OK, intent);
                             startActivity(intent);
 

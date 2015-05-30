@@ -39,6 +39,8 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
     CitationsData mCitationsData;
     private int vehicleId;
     private int ownerId;
+    private String mPlate;
+    private String mState;
 
     public static final String TAG = Citations.class.getSimpleName();
 
@@ -48,8 +50,11 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_citations);
+
         Intent intent = getIntent();
         vehicleId = intent.getIntExtra("vehicleID",0);
+        mPlate = intent.getStringExtra("Plate");
+        mState = intent.getStringExtra("State");
 
 
         officer = (FloatingLabelEditText)findViewById(R.id.officer);
@@ -147,7 +152,10 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
                            locationPicker.getInputWidget().getText().toString());
                     mDataSource.insertCitations(mCitationsData);
                         Toast.makeText(Citations.this, "Citation added!", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(Citations.this,MainActivity.class);
+                        Intent intent = new Intent(Citations.this,VehicleInformation.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.putExtra(MainActivity.plateExtra, mPlate);
+                        intent.putExtra(MainActivity.stateExtra, mState);
                         startActivity(intent);
 
                     } catch (SQLException e) {

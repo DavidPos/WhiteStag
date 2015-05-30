@@ -68,6 +68,8 @@ public class VehicleList extends ListActivity {
             Intent intent = new Intent(VehicleList.this, VehicleInformation.class);
             intent.putExtra(MainActivity.plateExtra, plate);
             intent.putExtra(MainActivity.stateExtra, state);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
 

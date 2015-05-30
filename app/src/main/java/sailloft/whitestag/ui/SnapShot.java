@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 
 import sailloft.whitestag.R;
 import sailloft.whitestag.db.ParkingDataSource;
@@ -31,18 +32,23 @@ public class SnapShot extends ActionBarActivity implements ItemPickerListener<St
     private int vehicleId;
     private int ownerId;
     private SnapShotData mSnapShotData;
+    private String mPlate;
+    private String mState;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snap_shot);
+
         addSnap = (FloatingActionButton)findViewById(R.id.addSnapButton);
         mParkingDataSource = new ParkingDataSource(this);
 
         Intent intent = getIntent();
         vehicleId = intent.getIntExtra("vehicleID", -1);
         ownerId = intent.getIntExtra("ownerID", -1);
+        mPlate = intent.getStringExtra("Plate");
+        mState = intent.getStringExtra("State");
 
         locationPicker = (FloatingLabelItemPicker<String>)findViewById(R.id.locationPicker);
         String[] location = getResources().getStringArray(R.array.locations);
@@ -88,7 +94,7 @@ public class SnapShot extends ActionBarActivity implements ItemPickerListener<St
         addSnap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm");
+                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm", Locale.US);
 
                 mSnapShotData = new SnapShotData(ownerId,
                         sdf.format(new Date()),
@@ -96,7 +102,11 @@ public class SnapShot extends ActionBarActivity implements ItemPickerListener<St
                                locationPicker.getInputWidget().getText().toString());
                 mParkingDataSource.insertSnapShot(mSnapShotData);
                 Toast.makeText(SnapShot.this, "Vehicle added to SnapShot", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(SnapShot.this, MainActivity.class);
+
+                Intent intent = new Intent(SnapShot.this, VehicleInformation.class);
+                intent.putExtra(MainActivity.stateExtra,mState);
+                intent.putExtra(MainActivity.plateExtra, mPlate);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
 
             }
