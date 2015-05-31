@@ -47,6 +47,10 @@ public class VehicleInformation extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle_information);
+        if (savedInstanceState != null){
+            mState = savedInstanceState.getString("state");
+            mPlate = savedInstanceState.getString("plate");
+        }
         Intent intent = getIntent();
          items = new ArrayList<Item>();
 
@@ -70,6 +74,7 @@ public class VehicleInformation extends ListActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(VehicleInformation.this, SnapShot.class);
                 intent.putExtra("vehicleID", vehicleID);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("ownerID", ownerId);
                 intent.putExtra("Plate", mPlate);
                 intent.putExtra("State", mState);
@@ -83,6 +88,7 @@ public class VehicleInformation extends ListActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(VehicleInformation.this, Citations.class);
                 intent.putExtra("vehicleID", vehicleID);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("Plate", mPlate);
                 intent.putExtra("State", mState);
 
@@ -97,6 +103,8 @@ public class VehicleInformation extends ListActivity {
                 intent.putExtra("ownerId", ownerId);
                 intent.putExtra(MainActivity.plateExtra, mPlate);
                 intent.putExtra(MainActivity.stateExtra, mState);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });
@@ -114,101 +122,102 @@ public class VehicleInformation extends ListActivity {
         mPlate = intent.getStringExtra(MainActivity.plateExtra);
         mState = intent.getStringExtra(MainActivity.stateExtra);
 
-       Cursor vehicle = mParkingDataSource.selectOneVehicleByPlate(mPlate, mState);
 
-        if (vehicle.getCount() <=0){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Unable to locate! Do you want to add this vehicle?")
-                    .setTitle("Vehicle not found!")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(VehicleInformation.this,VehicleAdd.class);
-                            intent.putExtra("Plate", mPlate);
-                            intent.putExtra("State", mState);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            setResult(RESULT_OK, intent);
-                            startActivity(intent);
+            Cursor vehicle = mParkingDataSource.selectOneVehicleByPlate(mPlate, mState);
+
+            if (vehicle.getCount() <= 0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Unable to locate! Do you want to add this vehicle?")
+                        .setTitle("Vehicle not found!")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(VehicleInformation.this, VehicleAdd.class);
+                                intent.putExtra("Plate", mPlate);
+                                intent.putExtra("State", mState);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                setResult(RESULT_OK, intent);
+                                startActivity(intent);
+
+                            }
+                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(VehicleInformation.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            } else {
+                vehicle.moveToFirst();
+
+                int i = vehicle.getColumnIndex(ParkingHelper.COLUMN_OWNER);
+                int o = vehicle.getColumnIndex(ParkingHelper.COLUMN_ID);
+                int z = vehicle.getColumnIndex(ParkingHelper.COLUMN_PLATE_NUMBER);
+
+                vehicleLabel.setText("Vehicle: " + vehicle.getString(z));
+
+                vehicleID = vehicle.getInt(o);
+                ownerId = vehicle.getInt(i);
+
+                Cursor citations = mParkingDataSource.selectCitationsForVehicle(vehicleID);
+                Cursor owner = mParkingDataSource.selectVehicleOwner(ownerId);
+                Cursor snap = mParkingDataSource.snapShotByVehicleId(vehicleID);
+                if (snap != null && citations != null) {
+                    owner.moveToFirst();
+                    int q = owner.getColumnIndex(ParkingHelper.COLUMN_FIRST_NAME);
+                    int w = owner.getColumnIndex(ParkingHelper.COLUMN_LAST_NAME);
+                    ownerLabel.setText("Owner:  " + owner.getString(q) + " " + owner.getString(w));
+
+                    updateList(citations, snap);
+                } else {
+                    if (snap != null) {
+                        items.add(new Header("SNAPSHOT"));
+                        snap.moveToFirst();
+
+                        while (!snap.isAfterLast()) {
+                            int intDate = snap.getColumnIndex(ParkingHelper.COLUMN_DATE_TIME);
+                            int intLoc = snap.getColumnIndex(ParkingHelper.COLUMN_LOCATION);
+                            String date = snap.getString(intDate);
+                            String location = snap.getString(intLoc);
+
+                            items.add(new ListItem(location, date));
+
+                            snap.moveToNext();
+                        }
+                        ListHeadersAdapter adapter = new ListHeadersAdapter(this, items);
+                        setListAdapter(adapter);
+
+                    }
+                    if (citations != null) {
+                        citations.moveToFirst();
+                        items.add(new Header("CITATIONS"));
+                        while (!citations.isAfterLast()) {
+
+                            int citDate = citations.getColumnIndex(ParkingHelper.COLUMN_DATE_TIME);
+                            int citType = citations.getColumnIndex(ParkingHelper.COLUMN_CITATIONS_TYPE);
+                            String date = citations.getString(citDate);
+                            String cite = citations.getString(citType);
+
+                            items.add(new ListItem(date, cite));
+
+
+                            citations.moveToNext();
 
                         }
-                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(VehicleInformation.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-        }
-        else {
-            vehicle.moveToFirst();
-
-            int i = vehicle.getColumnIndex(ParkingHelper.COLUMN_OWNER);
-            int o = vehicle.getColumnIndex(ParkingHelper.COLUMN_ID);
-            int z = vehicle.getColumnIndex(ParkingHelper.COLUMN_PLATE_NUMBER);
-
-            vehicleLabel.setText("Vehicle: " + vehicle.getString(z));
-
-            vehicleID = vehicle.getInt(o);
-            ownerId = vehicle.getInt(i);
-
-            Cursor citations = mParkingDataSource.selectCitationsForVehicle(vehicleID);
-            Cursor owner = mParkingDataSource.selectVehicleOwner(ownerId);
-            Cursor snap = mParkingDataSource.snapShotByVehicleId(vehicleID);
-            if (snap != null && citations != null) {
-                owner.moveToFirst();
-                int q = owner.getColumnIndex(ParkingHelper.COLUMN_FIRST_NAME);
-                int w = owner.getColumnIndex(ParkingHelper.COLUMN_LAST_NAME);
-                ownerLabel.setText("Owner:  " + owner.getString(q) + " " + owner.getString(w));
-
-                updateList(citations, snap);
-            } else {
-                if (snap != null) {
-                    items.add(new Header("SNAPSHOT"));
-                    snap.moveToFirst();
-
-                    while (!snap.isAfterLast()) {
-                        int intDate = snap.getColumnIndex(ParkingHelper.COLUMN_DATE_TIME);
-                        int intLoc = snap.getColumnIndex(ParkingHelper.COLUMN_LOCATION);
-                        String date = snap.getString(intDate);
-                        String location = snap.getString(intLoc);
-
-                        items.add(new ListItem(location, date));
-
-                        snap.moveToNext();
+                        ListHeadersAdapter adapter = new ListHeadersAdapter(this, items);
+                        setListAdapter(adapter);
                     }
-                    ListHeadersAdapter adapter = new ListHeadersAdapter(this,items);
-                    setListAdapter(adapter);
-
-                } if (citations != null){
-                    citations.moveToFirst();
-                    items.add(new Header("CITATIONS"));
-                    while (!citations.isAfterLast()) {
-
-                        int citDate = citations.getColumnIndex(ParkingHelper.COLUMN_DATE_TIME);
-                        int citType = citations.getColumnIndex(ParkingHelper.COLUMN_CITATIONS_TYPE);
-                        String date = citations.getString(citDate);
-                        String cite = citations.getString(citType);
-
-                        items.add(new ListItem(date, cite));
 
 
-                        citations.moveToNext();
-
+                    if (citations == null && snap == null) {
+                        Log.i(TAG, "No citations");
                     }
-                    ListHeadersAdapter adapter = new ListHeadersAdapter(this, items);
-                    setListAdapter(adapter);
+
                 }
-
-
-              if (citations == null && snap == null){
-                 Log.i(TAG,"No citations");
-              }
-
             }
-        }
 
 
 
@@ -260,7 +269,11 @@ public class VehicleInformation extends ListActivity {
         }
 
 
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString("state", mState);
+        outState.putString("plate", mPlate);
+    }
 
 
 

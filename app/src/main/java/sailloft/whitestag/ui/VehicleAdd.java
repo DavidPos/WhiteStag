@@ -3,6 +3,7 @@ package sailloft.whitestag.ui;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -41,6 +42,8 @@ public class VehicleAdd extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle_add);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         plateNumber = (FloatingLabelEditText)findViewById(R.id.plateInfo);
         vehicleModel =(FloatingLabelEditText)findViewById(R.id.vehicleModelSnap) ;
         vehicleMake =(FloatingLabelEditText)findViewById(R.id.vehicleMake) ;

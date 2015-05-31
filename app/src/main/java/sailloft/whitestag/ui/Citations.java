@@ -2,8 +2,10 @@ package sailloft.whitestag.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +52,8 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_citations);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         Intent intent = getIntent();
         vehicleId = intent.getIntExtra("vehicleID",0);
@@ -125,54 +129,67 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
     @Override
     protected void onResume() {
         super.onResume();
-
+        try {
+        mDataSource.open();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
 
 
 
             addCite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                    mDataSource.open();
 
-                        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm", Locale.US);
 
+                    SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm", Locale.US);
 
 
                     String citeReason = citeReasonPicker.getSelectedItems().toString();
 
 
-                   mCitationsData = new CitationsData(ownerId,
-                           officer.getInputWidgetText().toString(),
-                           citeReason ,
-                           sdf.format(new Date()),
-                           0,
-                           vehicleId,
-                           addInfo.getInputWidgetText().toString(),
-                           locationPicker.getInputWidget().getText().toString());
+                    mCitationsData = new CitationsData(ownerId,
+                            officer.getInputWidgetText().toString(),
+                            citeReason,
+                            sdf.format(new Date()),
+                            0,
+                            vehicleId,
+                            addInfo.getInputWidgetText().toString(),
+                            locationPicker.getInputWidget().getText().toString());
                     mDataSource.insertCitations(mCitationsData);
-                        Toast.makeText(Citations.this, "Citation added!", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(Citations.this,VehicleInformation.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        intent.putExtra(MainActivity.plateExtra, mPlate);
-                        intent.putExtra(MainActivity.stateExtra, mState);
-                        startActivity(intent);
+                    Toast.makeText(Citations.this, "Citation added!", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(Citations.this, VehicleInformation.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra(MainActivity.plateExtra, mPlate);
+                    intent.putExtra(MainActivity.stateExtra, mState);
+                    startActivity(intent);
 
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+
                 }
             });
 
 
 
     }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK ) {
+            Intent intent = new Intent(Citations.this,VehicleInformation.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra(MainActivity.plateExtra, mPlate);
+            intent.putExtra(MainActivity.stateExtra, mState);
+            startActivity(intent);
+            return true;
+        }
 
+        return super.onKeyDown(keyCode, event);
+    }
     @Override
     protected void onPause() {
         super.onPause();
         mDataSource.close();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

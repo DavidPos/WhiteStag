@@ -3,7 +3,9 @@ package sailloft.whitestag.ui;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +38,8 @@ public class OwnerEdit extends ActionBarActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_edit);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         Intent intent = getIntent();
         ownerID = intent.getIntExtra("ownerId", -1);
         mPlate = intent.getStringExtra(MainActivity.plateExtra);
@@ -105,6 +109,18 @@ public class OwnerEdit extends ActionBarActivity {
     protected void onPause() {
         super.onPause();
         mParkingDataSource.close();
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent(OwnerEdit.this, VehicleInformation.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra(MainActivity.plateExtra, mPlate);
+            intent.putExtra(MainActivity.stateExtra, mState);
+            startActivity(intent);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

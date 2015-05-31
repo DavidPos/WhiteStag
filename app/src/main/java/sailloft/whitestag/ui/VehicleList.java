@@ -42,7 +42,8 @@ public class VehicleList extends ListActivity {
             e.printStackTrace();
         }
         Intent intent = getIntent();
-        if (intent.getStringExtra(MainActivity.stateExtra).isEmpty()) {
+        String state = intent.getStringExtra(MainActivity.stateExtra);
+        if (state == null) {
             Cursor cursor = mParkingDataSource.selectAllVehicles();
             updateList(cursor);
 

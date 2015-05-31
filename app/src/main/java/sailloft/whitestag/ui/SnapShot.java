@@ -2,7 +2,9 @@ package sailloft.whitestag.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import sailloft.whitestag.R;
 import sailloft.whitestag.db.ParkingDataSource;
@@ -40,6 +43,8 @@ public class SnapShot extends ActionBarActivity implements ItemPickerListener<St
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snap_shot);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         addSnap = (FloatingActionButton)findViewById(R.id.addSnapButton);
         mParkingDataSource = new ParkingDataSource(this);
@@ -95,6 +100,8 @@ public class SnapShot extends ActionBarActivity implements ItemPickerListener<St
             @Override
             public void onClick(View v) {
                 SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm", Locale.US);
+                sdf.setTimeZone(TimeZone.getDefault());
+
 
                 mSnapShotData = new SnapShotData(ownerId,
                         sdf.format(new Date()),
@@ -122,6 +129,18 @@ public class SnapShot extends ActionBarActivity implements ItemPickerListener<St
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent(SnapShot.this, VehicleInformation.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra(MainActivity.plateExtra, mPlate);
+            intent.putExtra(MainActivity.stateExtra, mState);
+            startActivity(intent);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
