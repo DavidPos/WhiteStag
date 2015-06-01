@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import sailloft.whitestag.R;
 import sailloft.whitestag.db.ParkingDataSource;
@@ -99,8 +98,8 @@ public class SnapShot extends ActionBarActivity implements ItemPickerListener<St
         addSnap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm", Locale.US);
-                sdf.setTimeZone(TimeZone.getDefault());
+                SimpleDateFormat sdf = new SimpleDateFormat("MMM-dd-yyyy HH:mm", Locale.US);
+
 
 
                 mSnapShotData = new SnapShotData(ownerId,
@@ -114,6 +113,7 @@ public class SnapShot extends ActionBarActivity implements ItemPickerListener<St
                 intent.putExtra(MainActivity.stateExtra,mState);
                 intent.putExtra(MainActivity.plateExtra, mPlate);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
 
             }

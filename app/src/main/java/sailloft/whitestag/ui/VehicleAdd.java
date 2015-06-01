@@ -66,6 +66,7 @@ public class VehicleAdd extends ActionBarActivity {
             Intent recent = getIntent();
             state.setInputWidgetText(recent.getStringExtra("State"));
             plateNumber.setInputWidgetText(recent.getStringExtra("Plate"));
+            vehicleMake.requestFocus();
         }
 
         mParkingDataSource = new ParkingDataSource(this);

@@ -49,6 +49,7 @@ public class OwnerAdd extends ActionBarActivity {
         if(intent != null) {
             mFirstName.setInputWidgetText(intent.getStringExtra("first"));
             mLastName.setInputWidgetText(intent.getStringExtra("last"));
+            mPermits.requestFocus();
         }
 
 

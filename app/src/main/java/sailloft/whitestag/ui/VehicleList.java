@@ -65,12 +65,14 @@ public class VehicleList extends ListActivity {
             HashMap vehicle = allVehicles.get(position);
             String plate = (String) vehicle.get(KEY_PLATE);
             String state = (String) vehicle.get(KEY_STATE);
-            allVehicles.clear();
+
+
             Intent intent = new Intent(VehicleList.this, VehicleInformation.class);
             intent.putExtra(MainActivity.plateExtra, plate);
             intent.putExtra(MainActivity.stateExtra, state);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            allVehicles.clear();
             startActivity(intent);
         }
 

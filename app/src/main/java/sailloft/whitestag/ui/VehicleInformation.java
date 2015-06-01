@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -89,6 +90,7 @@ public class VehicleInformation extends ListActivity {
                 Intent intent = new Intent(VehicleInformation.this, Citations.class);
                 intent.putExtra("vehicleID", vehicleID);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
                 intent.putExtra("Plate", mPlate);
                 intent.putExtra("State", mState);
 
@@ -169,8 +171,11 @@ public class VehicleInformation extends ListActivity {
                     owner.moveToFirst();
                     int q = owner.getColumnIndex(ParkingHelper.COLUMN_FIRST_NAME);
                     int w = owner.getColumnIndex(ParkingHelper.COLUMN_LAST_NAME);
-                    ownerLabel.setText("Owner:  " + owner.getString(q) + " " + owner.getString(w));
-
+                    if(owner.getString(q)== null && owner.getString(w) == null){
+                        ownerLabel.setText("Owner is unknown");
+                    }else {
+                        ownerLabel.setText("Owner:  " + owner.getString(q) + " " + owner.getString(w));
+                    }
                     updateList(citations, snap);
                 } else {
                     if (snap != null) {
@@ -227,6 +232,7 @@ public class VehicleInformation extends ListActivity {
     protected void onPause(){
         super.onPause();
         mParkingDataSource.close();
+        items.clear();
     }
     protected void updateList(Cursor cites, Cursor snaps){
         snaps.moveToFirst();
@@ -267,6 +273,18 @@ public class VehicleInformation extends ListActivity {
 
 
         }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent(VehicleInformation.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra(MainActivity.plateExtra, mPlate);
+            intent.putExtra(MainActivity.stateExtra, mState);
+            startActivity(intent);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 
     @Override

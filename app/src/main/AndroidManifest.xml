@@ -12,7 +12,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".ui.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -74,6 +75,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sailloft.whitestag.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.VehicleEdit"
+            android:label="@string/title_activity_vehicle_edit"
+            android:parentActivityName=".ui.VehicleInformation" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sailloft.whitestag.ui.VehicleInformation" />
         </activity>
     </application>
 
