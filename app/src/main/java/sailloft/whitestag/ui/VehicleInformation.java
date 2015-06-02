@@ -110,6 +110,18 @@ public class VehicleInformation extends ListActivity {
                 startActivity(intent);
             }
         });
+        vehicleLabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VehicleInformation.this, VehicleEdit.class);
+                intent.putExtra("ownerId", ownerId);
+                intent.putExtra(MainActivity.plateExtra, mPlate);
+                intent.putExtra(MainActivity.stateExtra, mState);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

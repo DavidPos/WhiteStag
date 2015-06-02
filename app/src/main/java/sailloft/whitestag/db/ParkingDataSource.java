@@ -179,7 +179,7 @@ public class ParkingDataSource {
 
         Cursor cursor = mDatabase.query(
                 ParkingHelper.TABLE_VEHICLES,
-                new String[]{ParkingHelper.COLUMN_ID, ParkingHelper.COLUMN_PLATE_NUMBER, ParkingHelper.COLUMN_MAKE, ParkingHelper.COLUMN_MODEL, ParkingHelper.COLUMN_OWNER},
+                new String[]{ParkingHelper.COLUMN_ID, ParkingHelper.COLUMN_PLATE_NUMBER, ParkingHelper.COLUMN_MAKE, ParkingHelper.COLUMN_MODEL, ParkingHelper.COLUMN_YEAR, ParkingHelper.COLUMN_OWNER},
                 ParkingHelper.COLUMN_PLATE_NUMBER + " = ?" +
                 " AND " + ParkingHelper.COLUMN_PLATE_STATE + " = ?",
                 new String[]{plate, plateState},
@@ -275,6 +275,21 @@ public class ParkingDataSource {
 
 
 
+    }
+    public int updateVehicle(VehicleData vehicle, String plate, String state){
+        ContentValues values = new ContentValues();
+        String whereClause = ParkingHelper.COLUMN_PLATE_NUMBER + " = ?" + " AND " + ParkingHelper.COLUMN_PLATE_STATE + " = ?";
+        values.put(ParkingHelper.COLUMN_MAKE, vehicle.getMake());
+        values.put(ParkingHelper.COLUMN_MODEL, vehicle.getModel());
+        values.put(ParkingHelper.COLUMN_PLATE_NUMBER, vehicle.getPlateNumber());
+        values.put(ParkingHelper.COLUMN_PLATE_STATE, vehicle.getPlateState());
+        values.put(ParkingHelper.COLUMN_OWNER, vehicle.getOwner());
+        values.put(ParkingHelper.COLUMN_YEAR, vehicle.getYear());
+        int rowsUpdated = mDatabase.update(ParkingHelper.TABLE_VEHICLES,
+                values,
+                whereClause,
+                new String[]{plate, state});
+        return rowsUpdated;
     }
     //delete
 
