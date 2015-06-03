@@ -291,6 +291,16 @@ public class ParkingDataSource {
                 new String[]{plate, state});
         return rowsUpdated;
     }
+    public int updateVehicleOwner(int vehicleId){
+        ContentValues values = new ContentValues();
+        String whereClause = ParkingHelper.COLUMN_ID + " = ?" ;
+        values.put(ParkingHelper.COLUMN_OWNER, vehicleId);
+        int rowsUpdated = mDatabase.update(ParkingHelper.TABLE_VEHICLES,
+                values,
+                whereClause,
+                new String[]{Integer.toString(vehicleId)});
+        return rowsUpdated;
+    }
     //delete
 
 }

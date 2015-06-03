@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import sailloft.whitestag.R;
 import sailloft.whitestag.db.ParkingDataSource;
 import sailloft.whitestag.db.ParkingHelper;
+import sailloft.whitestag.model.OwnerData;
 import sailloft.whitestag.model.VehicleData;
 
 public class VehicleEdit extends ActionBarActivity {
@@ -34,6 +35,7 @@ public class VehicleEdit extends ActionBarActivity {
     private FloatingActionButton addVehicle;
     private VehicleData mVehicle;
     private int mOwner;
+    private OwnerData tempOwner;
 
 
     private String mPlate;
@@ -83,7 +85,7 @@ public class VehicleEdit extends ActionBarActivity {
         int q = vehicle.getColumnIndex(ParkingHelper.COLUMN_MAKE);
         int w = vehicle.getColumnIndex(ParkingHelper.COLUMN_MODEL);
         int z = vehicle.getColumnIndex(ParkingHelper.COLUMN_YEAR);
-        int y = vehicle.getColumnIndex(ParkingHelper.COLUMN_OWNER);
+
         int a = owner.getColumnIndex(ParkingHelper.COLUMN_FIRST_NAME);
         int b = owner.getColumnIndex(ParkingHelper.COLUMN_LAST_NAME);
 
@@ -100,24 +102,60 @@ public class VehicleEdit extends ActionBarActivity {
 
             @Override
             public void onClick(View v) {
-                mVehicle = new VehicleData(vehicleMake.getInputWidgetText().toString(),
-                        vehicleModel.getInputWidgetText().toString(),
-                        plateNumber.getInputWidgetText().toString(),
-                        state.getInputWidgetText().toString(),
-                        vehicleYear.getInputWidgetText().toString(), mOwner);
-                mParkingDataSource.updateVehicle(mVehicle, mPlate, mState);
+
+                if (vehicleOwner.getInputWidgetText().toString().equals("")){
+                    //update vehicle if the owner is unknown we create a blank owner into the database and link it to the vehicle
+                    tempOwner = new OwnerData(null, null, null, null, null);
+
+                    mVehicle = new VehicleData(vehicleMake.getInputWidgetText().toString(),
+                            vehicleModel.getInputWidgetText().toString(),
+                            plateNumber.getInputWidgetText().toString(),
+                            state.getInputWidgetText().toString(),
+                            vehicleYear.getInputWidgetText().toString(),
+                            (int)mParkingDataSource.insertOwnerReturnId(tempOwner));
+                    mParkingDataSource.updateVehicle(mVehicle, mPlate, mState);
+                    Intent intent = new Intent(VehicleEdit.this, VehicleInformation.class);
+                    intent.putExtra(MainActivity.plateExtra, plateNumber.getInputWidgetText().toString());
+                    intent.putExtra(MainActivity.stateExtra, state.getInputWidgetText().toString());
+                    startActivity(intent);
 
 
-                Intent intent = new Intent(VehicleEdit.this, VehicleInformation.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                intent.putExtra(MainActivity.plateExtra, mPlate);
-                intent.putExtra(MainActivity.stateExtra, mState);
-                startActivity(intent);
+                }
+                else {
+                    String[] name = vehicleOwner.getInputWidgetText().toString().split(" ");
 
 
-            }
+                    Cursor owner = mParkingDataSource.selectOwnerByName(name[0].replaceAll("\\s+", ""), name[1].replaceAll("\\s+", ""));
+                    if (owner.getCount() <= 0) {
+                        //no owner found so sent to owner add activity
+                        Intent intent = new Intent(VehicleEdit.this, OwnerAdd.class);
+                        intent.putExtra("first", name[0]);
+                        intent.putExtra("last", name[1]);
+                        startActivityForResult(intent, 2);
+
+                    } else {
+                            //owner found so update vehicle
+
+                        mVehicle = new VehicleData(vehicleMake.getInputWidgetText().toString(),
+                                vehicleModel.getInputWidgetText().toString(),
+                                plateNumber.getInputWidgetText().toString(),
+                                state.getInputWidgetText().toString(),
+                                vehicleYear.getInputWidgetText().toString(), mOwner);
+                        mParkingDataSource.updateVehicle(mVehicle, mPlate, mState);
+
+
+                        Intent intent = new Intent(VehicleEdit.this, VehicleInformation.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                        intent.putExtra(MainActivity.plateExtra, mPlate);
+                        intent.putExtra(MainActivity.stateExtra, mState);
+                        startActivity(intent);
+                    }
+                }
+        }
+
         });
 
     }

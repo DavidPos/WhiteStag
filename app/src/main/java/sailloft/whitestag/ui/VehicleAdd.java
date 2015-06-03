@@ -79,11 +79,15 @@ public class VehicleAdd extends ActionBarActivity {
         super.onResume();
         try {
             mParkingDataSource.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
             addVehicle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (vehicleOwner.getInputWidgetText().toString().equals("")){
+                        //add vehicle if the owner is unknown we add a blank owner into the database and link it to the vehicle
                         mOwner = new OwnerData(null, null, null, null, null);
 
                         mVehicle = new VehicleData(vehicleMake.getInputWidgetText().toString(),
@@ -102,16 +106,21 @@ public class VehicleAdd extends ActionBarActivity {
 
                     }
                     else {
+                        /*if name is entered in edit text search for name in database
+                         if the name is in the we add the vehicle, otherwise we go to the add owner activity
+                          */
                         String[] name = vehicleOwner.getInputWidgetText().toString().split(" ");
                         Log.e("STRING:", name[0] + ":" + name[1]);
                         Cursor owner = mParkingDataSource.selectOwnerByName(name[0].replaceAll("\\s+", ""), name[1].replaceAll("\\s+", ""));
                         if (owner.getCount() <= 0) {
+                            //no owner found so sent to owner add activity
                             Intent intent = new Intent(VehicleAdd.this, OwnerAdd.class);
                             intent.putExtra("first", name[0]);
                             intent.putExtra("last", name[1]);
                             startActivityForResult(intent, 2);
 
                         } else {
+                            // owner is found, add name to floating edit text
                             if (ownerId <= 0) {
 
                                 owner.moveToFirst();
@@ -133,9 +142,7 @@ public class VehicleAdd extends ActionBarActivity {
                 }
             });
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
     }
 
 
