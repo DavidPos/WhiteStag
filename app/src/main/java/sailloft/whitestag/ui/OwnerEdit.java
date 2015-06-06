@@ -125,7 +125,7 @@ public class OwnerEdit extends ActionBarActivity {
                       if no entry then use current ownerId, if there is a owner in db use that owner Id instead
                      */
                     if (owner.getCount()<= 0 ) {
-                        //no owner found so update owner using current id
+                        //no owner found by name so add owner using current id
                         updateOwner(ownerID);
 
                     }
