@@ -291,14 +291,14 @@ public class ParkingDataSource {
                 new String[]{plate, state});
         return rowsUpdated;
     }
-    public int updateVehicleOwner(int vehicleId){
+    public int updateVehicleOwner(int ownerId, String plate, String state){
         ContentValues values = new ContentValues();
-        String whereClause = ParkingHelper.COLUMN_ID + " = ?" ;
-        values.put(ParkingHelper.COLUMN_OWNER, vehicleId);
+        String whereClause = ParkingHelper.COLUMN_PLATE_NUMBER + " = ?" + " AND " + ParkingHelper.COLUMN_PLATE_STATE + " = ?";
+        values.put(ParkingHelper.COLUMN_OWNER, ownerId);
         int rowsUpdated = mDatabase.update(ParkingHelper.TABLE_VEHICLES,
                 values,
                 whereClause,
-                new String[]{Integer.toString(vehicleId)});
+                new String[]{plate, state});
         return rowsUpdated;
     }
     //delete

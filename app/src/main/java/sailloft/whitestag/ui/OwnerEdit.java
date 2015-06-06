@@ -100,34 +100,21 @@ public class OwnerEdit extends ActionBarActivity {
                 if (checkNull){
 
                     if (checkForNull()){
-                        //still null add to current ownerId
+                        //still null add any info to current ownerId
                        updateOwner(ownerID);
                         returnToVi();
                     }
                     else{
-                        //not null anymore if name in db
-                        if(ownerCheck == ownerID) {
-                            //no change in owners name or ID
-                           updateOwner(ownerID);
+                        //not null anymore check if name in db
+                        if (owner.getCount() == 0){
+                            //no owner by name so use current id and insert in new information
+                            updateOwner(ownerID);
                             returnToVi();
                         }
                         else{
-                            //different owner than from previous
-                            if (owner.getCount() == 0){
-                                //no owner by name so create new owner
-                                mOwner = new OwnerData(mFirstName.getInputWidgetText().toString(),
-                                        mLastName.getInputWidgetText().toString(),
-                                        mPermits.getInputWidgetText().toString(),
-                                        mDepartment.getInputWidgetText().toString(),
-                                        mBuilding.getInputWidgetText().toString());
-                                mParkingDataSource.insertOwner(mOwner);
-                            }
-                            else{
-                                //owner is in db so use that ownerId
-                                updateOwner(ownerCheck);
-                            }
+                            //owner is in db so use that ownerId and up date the vehicle owner
 
-                            updateOwner(ownerCheck);
+                            mParkingDataSource.updateVehicleOwner(ownerCheck,mPlate,mState);
                             returnToVi();
                         }
 
@@ -138,25 +125,18 @@ public class OwnerEdit extends ActionBarActivity {
                       if no entry then use current ownerId, if there is a owner in db use that owner Id instead
                      */
                     if (owner.getCount()<= 0 ) {
-                        //no owner found so add owner using current id
+                        //no owner found so update owner using current id
+                        updateOwner(ownerID);
 
                     }
                     else{
                         if (ownerCheck == ownerID) {
-                            mOwner = new OwnerData(mFirstName.getInputWidgetText().toString(),
-                                    mLastName.getInputWidgetText().toString(),
-                                    mPermits.getInputWidgetText().toString(),
-                                    mDepartment.getInputWidgetText().toString(),
-                                    mBuilding.getInputWidgetText().toString());
-                            mParkingDataSource.updateOwner(mOwner, ownerID);
+                            //same ID so update current owner
+                           updateOwner(ownerID);
                             returnToVi();
                         } else {
-                            mOwner = new OwnerData(mFirstName.getInputWidgetText().toString(),
-                                    mLastName.getInputWidgetText().toString(),
-                                    mPermits.getInputWidgetText().toString(),
-                                    mDepartment.getInputWidgetText().toString(),
-                                    mBuilding.getInputWidgetText().toString());
-                            mParkingDataSource.updateOwner(mOwner, ownerCheck);
+                            //different owner so change the vehicle owner
+                            mParkingDataSource.updateVehicleOwner(ownerCheck,mPlate,mState);
                             returnToVi();
                         }
                     }
@@ -165,15 +145,7 @@ public class OwnerEdit extends ActionBarActivity {
 
 
 
-                    if (checkNull)
-                    owner.moveToFirst();
-                    int x = owner.getColumnIndex(ParkingHelper.COLUMN_ID);
-                    ownerID = owner.getInt(x);
-                    updateOwner(ownerID);
 
-
-
-                }
 
 
             }
@@ -202,7 +174,7 @@ public class OwnerEdit extends ActionBarActivity {
                 mPermits.getInputWidgetText().toString(),
                 mDepartment.getInputWidgetText().toString(),
                 mBuilding.getInputWidgetText().toString());
-        mParkingDataSource.updateOwner(mOwner, ownerID);
+        mParkingDataSource.updateOwner(mOwner, ownerId);
 
     }
 
