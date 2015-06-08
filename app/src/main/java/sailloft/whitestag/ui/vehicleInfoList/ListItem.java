@@ -23,6 +23,14 @@ public class ListItem implements Item {
         return ListHeadersAdapter.RowType.LIST_ITEM.ordinal();
     }
 
+    public String getStr1() {
+        return str1;
+    }
+
+    public String getStr2() {
+        return str2;
+    }
+
     @Override
     public View getView(LayoutInflater inflater, View convertView) {
         View view;

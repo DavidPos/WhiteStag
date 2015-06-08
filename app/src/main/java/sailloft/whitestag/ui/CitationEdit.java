@@ -1,15 +1,13 @@
 package sailloft.whitestag.ui;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText;
@@ -18,18 +16,16 @@ import com.marvinlabs.widget.floatinglabel.itempicker.ItemPickerListener;
 import com.marvinlabs.widget.floatinglabel.itempicker.StringPickerDialogFragment;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.Locale;
+import java.util.List;
 
 import sailloft.whitestag.R;
 import sailloft.whitestag.db.ParkingDataSource;
+import sailloft.whitestag.db.ParkingHelper;
 import sailloft.whitestag.model.CitationsData;
 
-
-public class Citations extends ActionBarActivity implements ItemPickerListener<String> {
+public class CitationEdit extends ActionBarActivity implements ItemPickerListener<String> {
     FloatingLabelItemPicker<String> citeReasonPicker;
     FloatingLabelItemPicker<String> locationPicker;
 
@@ -39,19 +35,18 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
     protected ParkingDataSource mDataSource;
     FloatingActionButton addCite;
     CitationsData mCitationsData;
+    protected int[] indices;
     private int vehicleId;
     private int ownerId;
     private String mPlate;
     private String mState;
-
-    public static final String TAG = Citations.class.getSimpleName();
-
+    private String mDate;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_citations);
+        setContentView(R.layout.activity_citation_edit);
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
@@ -59,7 +54,7 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
         vehicleId = intent.getIntExtra("vehicleID",0);
         mPlate = intent.getStringExtra("Plate");
         mState = intent.getStringExtra("State");
-        ownerId = intent.getIntExtra("ownerID",0);
+        mDate = intent.getStringExtra("Date");
 
 
         officer = (FloatingLabelEditText)findViewById(R.id.officer);
@@ -105,7 +100,7 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
             }
         });
 
-}
+    }
 
     @Override
     public void onCancelled(int pickerId) {
@@ -120,8 +115,8 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
         }
         else if(pickerId == R.id.locationPicker ){
             locationPicker.setSelectedIndices(selectedIndices);
-            String mLocations = getResources().getTextArray(R.array.locations)[selectedIndices[0]].toString();
-            Log.i(TAG, mLocations );
+
+
 
         }
 
@@ -131,51 +126,33 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
     protected void onResume() {
         super.onResume();
         try {
-        mDataSource.open();
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
+            mDataSource.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Cursor cite = mDataSource.selectCitation(vehicleId, mDate);
+        cite.moveToFirst();
+        int z = cite.getColumnIndex(ParkingHelper.COLUMN_OFFICER);
+        int x = cite.getColumnIndex(ParkingHelper.COLUMN_CITATIONS_TYPE);
+        officer.setInputWidgetText(cite.getString(z));
+        String citeReason = cite.getString(x);
+        String regex = "\\[|\\]";
+        citeReason.replace(regex,"");
 
 
+        List<String> available = citeReasonPicker.getAvailableItems();
 
-            addCite.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm", Locale.US);
+        available.indexOf("");
+        indices[0] = 1 ;
 
 
-                    String citeReason = citeReasonPicker.getSelectedItems().toString();
-
-
-                    mCitationsData = new CitationsData(ownerId,
-                            officer.getInputWidgetText().toString(),
-                            citeReason,
-                            sdf.format(new Date()),
-                            0,
-                            vehicleId,
-                            addInfo.getInputWidgetText().toString(),
-                            locationPicker.getInputWidget().getText().toString());
-                    mDataSource.insertCitations(mCitationsData);
-                    Toast.makeText(Citations.this, "Citation added!", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(Citations.this, VehicleInformation.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra(MainActivity.plateExtra, mPlate);
-                    intent.putExtra(MainActivity.stateExtra, mState);
-                    startActivity(intent);
-
-
-                }
-            });
-
-
+        citeReasonPicker.setSelectedIndices(indices);
 
     }
-    @Override
+        @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (keyCode == KeyEvent.KEYCODE_BACK ) {
-            Intent intent = new Intent(Citations.this,VehicleInformation.class);
+            Intent intent = new Intent(CitationEdit.this,VehicleInformation.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.putExtra(MainActivity.plateExtra, mPlate);
             intent.putExtra(MainActivity.stateExtra, mState);
@@ -191,11 +168,10 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
         mDataSource.close();
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_citations, menu);
+        getMenuInflater().inflate(R.menu.menu_citation_edit, menu);
         return true;
     }
 

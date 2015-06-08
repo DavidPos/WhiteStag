@@ -85,4 +85,5 @@
     <string name="title_activity_owner_edit">OwnerEdit</string>
     <string name="title_activity_vehicle_list">VehicleList</string>
     <string name="title_activity_vehicle_edit">VehicleEdit</string>
+    <string name="title_activity_citation_edit">CitationEdit</string>
 </resources>

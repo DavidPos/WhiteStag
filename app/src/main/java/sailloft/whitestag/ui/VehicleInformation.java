@@ -11,12 +11,14 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import sailloft.whitestag.R;
@@ -36,6 +38,7 @@ public class VehicleInformation extends ListActivity {
     private String mPlate;
     private int vehicleID;
     private int ownerId;
+    private HashMap<String, String> cites;
 
     private static final String TAG = VehicleInformation.class.getSimpleName();
     private TextView vehicleLabel;
@@ -90,7 +93,7 @@ public class VehicleInformation extends ListActivity {
                 Intent intent = new Intent(VehicleInformation.this, Citations.class);
                 intent.putExtra("vehicleID", vehicleID);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
+                intent.putExtra("ownerID", ownerId);
                 intent.putExtra("Plate", mPlate);
                 intent.putExtra("State", mState);
 
@@ -285,6 +288,32 @@ public class VehicleInformation extends ListActivity {
 
 
         }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        Item item = items.get(position);
+        Class mClass = item.getClass();
+
+       if(mClass.isInstance(ListHeadersAdapter.RowType.LIST_ITEM.ordinal())){
+
+           ListItem lItem = (ListItem) item;
+           String date = lItem.getStr1();
+           Intent intent = new Intent(VehicleInformation.this, CitationEdit.class);
+           intent.putExtra("vehicleID", vehicleID);
+           intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+           intent.putExtra("Date", date);
+           intent.putExtra("Plate", mPlate);
+           intent.putExtra("State", mState);
+
+           startActivity(intent);
+       }
+
+
+
+
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {

@@ -32,4 +32,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:21.0.2'
     compile 'com.marvinlabs:android-floatinglabel-widgets:1.6.1@aar'
     compile 'se.emilsjolander:stickylistheaders:2.6.0'
+    compile 'com.android.support:design:22.2.0'
 }

@@ -220,12 +220,13 @@ public class ParkingDataSource {
         return cursor;
     }
 
-    public Cursor selectCitationsForPerson(int ownerId){
+    public Cursor selectCitation(int vehicleId, String date){
         Cursor cursor = mDatabase.query(
                 ParkingHelper.TABLE_CITATIONS,
                 allCitationColumns,
-                ParkingHelper.COLUMN_OWNER +" = ?",
-                new String[]{Integer.toString(ownerId)},
+                ParkingHelper.COLUMN_VEHICLE +" = ?"+
+                        " AND " + ParkingHelper.COLUMN_DATE_TIME + " = ?",
+                new String[]{Integer.toString(vehicleId), date},
                 null,
                 null,
                 null,

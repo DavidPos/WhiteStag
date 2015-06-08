@@ -54,6 +54,8 @@
         android:layout_centerHorizontal="true"
         android:textColor="@android:color/black"/>
 
+
+
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

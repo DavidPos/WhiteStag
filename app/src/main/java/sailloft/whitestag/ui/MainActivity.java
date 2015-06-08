@@ -40,6 +40,8 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         mDataSource = new ParkingDataSource(MainActivity.this);
         plate = (FloatingLabelEditText)findViewById(R.id.plateNumberEdit);
 
