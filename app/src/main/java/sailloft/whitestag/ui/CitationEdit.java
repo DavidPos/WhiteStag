@@ -138,6 +138,12 @@ public class CitationEdit extends ActionBarActivity implements ItemPickerListene
         int z = cite.getColumnIndex(ParkingHelper.COLUMN_OFFICER);
         int x = cite.getColumnIndex(ParkingHelper.COLUMN_CITATIONS_TYPE);
         int y = cite.getColumnIndex(ParkingHelper.COLUMN_LOCATION);
+        int avd = cite.getColumnIndex(ParkingHelper.COLUMN_ADDITIONAL);
+        String additional = cite.getString(avd);
+        if (additional != null){
+            addInfo.setInputWidgetText(additional);
+
+        }
         List<String> locAvailable = locationPicker.getAvailableItems();
         int[] locIndex = new int[1];
         locIndex[0] = locAvailable.indexOf(cite.getString(y));
