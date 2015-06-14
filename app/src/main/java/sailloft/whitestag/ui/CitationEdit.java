@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import com.marvinlabs.widget.floatinglabel.itempicker.StringPickerDialogFragment
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import sailloft.whitestag.R;
@@ -35,7 +37,8 @@ public class CitationEdit extends ActionBarActivity implements ItemPickerListene
     protected ParkingDataSource mDataSource;
     FloatingActionButton addCite;
     CitationsData mCitationsData;
-    protected int[] indices;
+    protected int[] indices ={};
+    private ArrayList<Integer> index = new ArrayList<>();
     private int vehicleId;
     private int ownerId;
     private String mPlate;
@@ -135,18 +138,36 @@ public class CitationEdit extends ActionBarActivity implements ItemPickerListene
         int z = cite.getColumnIndex(ParkingHelper.COLUMN_OFFICER);
         int x = cite.getColumnIndex(ParkingHelper.COLUMN_CITATIONS_TYPE);
         officer.setInputWidgetText(cite.getString(z));
-        String citeReason = cite.getString(x);
-        String regex = "\\[|\\]";
-        citeReason.replace(regex,"");
-
-
         List<String> available = citeReasonPicker.getAvailableItems();
 
-        available.indexOf("");
-        indices[0] = 1 ;
+        String citeReason = cite.getString(x);
+        citeReason = citeReason.replaceAll("\\[", "").replaceAll("\\]","");
+        String[] cites = citeReason.split(",");
+        if (cites.length<0) {
+            indices = new int[cites.length];
+
+            for (int i = 0; i < cites.length; i++) {
+
+                indices[i] = available.indexOf(cites[i]);
+            }
+            citeReasonPicker.setSelectedIndices(indices);
+
+        }
+        else{
+            Log.i("cites:", citeReason + "split:" + cites[0] + "Available:" + available.toString());
+            index.add(available.indexOf(cites[0]));
+            indices = convertIntegers(index);
+            Log.i("CitationsEdit", indices[0] + "");
+            citeReasonPicker.setSelectedIndices(indices);
+        }
 
 
-        citeReasonPicker.setSelectedIndices(indices);
+
+
+
+
+
+
 
     }
         @Override
@@ -189,4 +210,15 @@ public class CitationEdit extends ActionBarActivity implements ItemPickerListene
 
         return super.onOptionsItemSelected(item);
     }
+    public static int[] convertIntegers(List<Integer> integers)
+    {
+        int[] ret = new int[integers.size()];
+        Iterator<Integer> iterator = integers.iterator();
+        for (int i = 0; i < ret.length; i++)
+        {
+            ret[i] = iterator.next().intValue();
+        }
+        return ret;
+    }
+
 }

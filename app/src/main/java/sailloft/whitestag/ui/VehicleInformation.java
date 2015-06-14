@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
@@ -292,13 +293,15 @@ public class VehicleInformation extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+        Toast.makeText(VehicleInformation.this, "CLick!", Toast.LENGTH_LONG).show();
         Item item = items.get(position);
         Class mClass = item.getClass();
 
-       if(mClass.isInstance(ListHeadersAdapter.RowType.LIST_ITEM.ordinal())){
+       //if(mClass.isInstance(ListHeadersAdapter.RowType.LIST_ITEM.ordinal())){
 
            ListItem lItem = (ListItem) item;
-           String date = lItem.getStr1();
+           String date = lItem.getStr2();
+            Log.i("Date", date);
            Intent intent = new Intent(VehicleInformation.this, CitationEdit.class);
            intent.putExtra("vehicleID", vehicleID);
            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -307,7 +310,7 @@ public class VehicleInformation extends ListActivity {
            intent.putExtra("State", mState);
 
            startActivity(intent);
-       }
+       //}
 
 
 
