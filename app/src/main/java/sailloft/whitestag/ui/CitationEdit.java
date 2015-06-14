@@ -137,6 +137,11 @@ public class CitationEdit extends ActionBarActivity implements ItemPickerListene
         cite.moveToFirst();
         int z = cite.getColumnIndex(ParkingHelper.COLUMN_OFFICER);
         int x = cite.getColumnIndex(ParkingHelper.COLUMN_CITATIONS_TYPE);
+        int y = cite.getColumnIndex(ParkingHelper.COLUMN_LOCATION);
+        List<String> locAvailable = locationPicker.getAvailableItems();
+        int[] locIndex = new int[1];
+        locIndex[0] = locAvailable.indexOf(cite.getString(y));
+        locationPicker.setSelectedIndices(locIndex);
         officer.setInputWidgetText(cite.getString(z));
         List<String> available = citeReasonPicker.getAvailableItems();
 
@@ -149,14 +154,10 @@ public class CitationEdit extends ActionBarActivity implements ItemPickerListene
 
 
             for (int i = 0; i < cites.length; i++) {
-               /* String q = cites[i].replaceAll("\\s", "");
-                indices[i] = available.indexOf(q);
-                Log.i("This is for the cites", indices[i] + "" +"the items are:" + cites[i] + q);
-                */
-                Log.i("cites:", citeReason + "split:" + cites[i] + "Available:" + available.toString());
+
                 index.add(available.indexOf(cites[i].trim()));
                 indices = convertIntegers(index);
-                Log.i("CitationsEdit", indices[i] + "");
+
 
             }
 
