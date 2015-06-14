@@ -143,13 +143,23 @@ public class CitationEdit extends ActionBarActivity implements ItemPickerListene
         String citeReason = cite.getString(x);
         citeReason = citeReason.replaceAll("\\[", "").replaceAll("\\]","");
         String[] cites = citeReason.split(",");
-        if (cites.length<0) {
+
+        if (cites.length>1) {
             indices = new int[cites.length];
 
-            for (int i = 0; i < cites.length; i++) {
 
-                indices[i] = available.indexOf(cites[i]);
+            for (int i = 0; i < cites.length; i++) {
+               /* String q = cites[i].replaceAll("\\s", "");
+                indices[i] = available.indexOf(q);
+                Log.i("This is for the cites", indices[i] + "" +"the items are:" + cites[i] + q);
+                */
+                Log.i("cites:", citeReason + "split:" + cites[i] + "Available:" + available.toString());
+                index.add(available.indexOf(cites[i].trim()));
+                indices = convertIntegers(index);
+                Log.i("CitationsEdit", indices[i] + "");
+
             }
+
             citeReasonPicker.setSelectedIndices(indices);
 
         }
