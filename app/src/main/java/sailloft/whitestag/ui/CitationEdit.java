@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText;
@@ -180,7 +181,24 @@ public class CitationEdit extends ActionBarActivity implements ItemPickerListene
 
 
 
+        addCite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String citeReason = citeReasonPicker.getSelectedItems().toString();
 
+                mDataSource.updateCitation(vehicleId,
+                        mDate,
+                        officer.getInputWidgetText().toString(),
+                        citeReason,
+                        locationPicker.getInputWidget().getText().toString(),
+                        addInfo.getInputWidgetText().toString());
+                Intent intent = new Intent(CitationEdit.this, VehicleInformation.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra(MainActivity.plateExtra, mPlate);
+                intent.putExtra(MainActivity.stateExtra, mState);
+                startActivity(intent);
+            }
+        });
 
 
 

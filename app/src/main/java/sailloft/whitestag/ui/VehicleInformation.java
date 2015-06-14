@@ -40,6 +40,7 @@ public class VehicleInformation extends ListActivity {
     private int vehicleID;
     private int ownerId;
     private HashMap<String, String> cites;
+    private int citeCount;
 
     private static final String TAG = VehicleInformation.class.getSimpleName();
     private TextView vehicleLabel;
@@ -183,6 +184,7 @@ public class VehicleInformation extends ListActivity {
                 Cursor citations = mParkingDataSource.selectCitationsForVehicle(vehicleID);
                 Cursor owner = mParkingDataSource.selectVehicleOwner(ownerId);
                 Cursor snap = mParkingDataSource.snapShotByVehicleId(vehicleID);
+                citeCount = citations.getCount();
                 if (snap != null && citations != null) {
                     owner.moveToFirst();
                     int q = owner.getColumnIndex(ParkingHelper.COLUMN_FIRST_NAME);
@@ -295,22 +297,21 @@ public class VehicleInformation extends ListActivity {
         super.onListItemClick(l, v, position, id);
         Toast.makeText(VehicleInformation.this, "CLick!", Toast.LENGTH_LONG).show();
         Item item = items.get(position);
-        Class mClass = item.getClass();
+        if (position <= citeCount && position != 0) {
 
-       //if(mClass.isInstance(ListHeadersAdapter.RowType.LIST_ITEM.ordinal())){
-
-           ListItem lItem = (ListItem) item;
-           String date = lItem.getStr2();
+            ListItem lItem = (ListItem) item;
+            String date = lItem.getStr2();
             Log.i("Date", date);
-           Intent intent = new Intent(VehicleInformation.this, CitationEdit.class);
-           intent.putExtra("vehicleID", vehicleID);
-           intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-           intent.putExtra("Date", date);
-           intent.putExtra("Plate", mPlate);
-           intent.putExtra("State", mState);
+            Intent intent = new Intent(VehicleInformation.this, CitationEdit.class);
+            intent.putExtra("vehicleID", vehicleID);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra("Date", date);
+            intent.putExtra("Plate", mPlate);
+            intent.putExtra("State", mState);
 
-           startActivity(intent);
-       //}
+            startActivity(intent);
+        }
+
 
 
 

@@ -302,6 +302,21 @@ public class ParkingDataSource {
                 new String[]{plate, state});
         return rowsUpdated;
     }
+
+    public int updateCitation(int vehicleId, String date, String officer, String cite, String location, String addInfo){
+        ContentValues values = new ContentValues();
+        String whereClause = ParkingHelper.COLUMN_VEHICLE + " = ?" + " AND " + ParkingHelper.COLUMN_DATE_TIME + " = ?";
+        values.put(ParkingHelper.COLUMN_OFFICER, officer);
+        values.put(ParkingHelper.COLUMN_CITATIONS_TYPE, cite);
+        values.put(ParkingHelper.COLUMN_LOCATION, location);
+        values.put(ParkingHelper.COLUMN_ADDITIONAL, addInfo);
+        int rowsUpdated = mDatabase.update(ParkingHelper.TABLE_CITATIONS,
+                values,
+                whereClause,
+                new String[]{Integer.toString(vehicleId), date});
+        return rowsUpdated;
+
+    }
     //delete
 
 }
