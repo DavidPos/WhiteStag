@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="8dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:id="@+id/addInfoLabel"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:layout_marginTop="88dp"
+
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addInfoText"
+        android:layout_below="@+id/addInfoLabel"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:width="250dp"
+        android:lines="1"
+        android:maxLines="1"
+        android:paddingTop="8sp"/>
+
+</RelativeLayout>

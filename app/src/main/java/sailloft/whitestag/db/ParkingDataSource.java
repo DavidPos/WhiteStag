@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import java.sql.SQLException;
 
 import sailloft.whitestag.model.CitationsData;
+import sailloft.whitestag.model.CiteReasonData;
+import sailloft.whitestag.model.LocationData;
 import sailloft.whitestag.model.OwnerData;
 import sailloft.whitestag.model.SnapShotData;
 import sailloft.whitestag.model.VehicleData;
@@ -143,6 +145,31 @@ public class ParkingDataSource {
         }
     }
 
+    public void insertLocation(LocationData locationData) {
+        mDatabase.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+
+            values.put(ParkingHelper.COLUMN_LOCATION, locationData.getLocation());
+            mDatabase.insert(ParkingHelper.TABLE_LOCATION, null, values);
+            mDatabase.setTransactionSuccessful();
+        } finally {
+            mDatabase.endTransaction();
+        }
+    }
+
+    public void insertCiteReason(CiteReasonData citeReasonData) {
+        mDatabase.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+
+            values.put(ParkingHelper.COLUMN_CITATIONS_TYPE, citeReasonData.getReason());
+            mDatabase.insert(ParkingHelper.TABLE_CITE_REASON, null, values);
+            mDatabase.setTransactionSuccessful();
+        } finally {
+            mDatabase.endTransaction();
+        }
+    }
 
 
     //select
@@ -252,6 +279,32 @@ public class ParkingDataSource {
                 allSnapShot,
                 ParkingHelper.COLUMN_VEHICLE + " = ?",
                 new String[]{Integer.toString(vehicleId)},
+                null,
+                null,
+                null,
+                null);
+        return cursor;
+    }
+
+    public Cursor selectAllLocations(){
+        Cursor cursor = mDatabase.query(
+                ParkingHelper.TABLE_LOCATION,
+                new String[]{ParkingHelper.COLUMN_ID, ParkingHelper.COLUMN_LOCATION},
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+        return cursor;
+    }
+
+    public Cursor selectAllCiteReasons(){
+        Cursor cursor = mDatabase.query(
+                ParkingHelper.TABLE_CITE_REASON,
+                new String[]{ParkingHelper.COLUMN_ID, ParkingHelper.COLUMN_CITATIONS_TYPE},
+                null,
+                null,
                 null,
                 null,
                 null,

@@ -11,7 +11,9 @@ public class ParkingHelper extends SQLiteOpenHelper {
     public static final String TABLE_VEHICLES = "VEHICLES";
     public static final String TABLE_OWNERS = "OWNERS";
     public static final String TABLE_CITATIONS ="CITATIONS";
+    public static final String TABLE_LOCATION ="LOCATION";
     public static final String TABLE_VEHICLE_SNAPSHOT = "SNAPSHOT";
+    public static final String TABLE_CITE_REASON = "CITE_REASON";
    //common columns
     public static final String COLUMN_ID = "_ID";
     public static final String COLUMN_LOCATION = "LOCATION";
@@ -80,6 +82,16 @@ public class ParkingHelper extends SQLiteOpenHelper {
                     COLUMN_VEHICLE + " INTEGER, "+
                     COLUMN_LOCATION + " TEXT)";
 
+    private static final String CREATE_TABLE_LOCATION =
+            "CREATE TABLE " + TABLE_LOCATION + " ("+
+                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_LOCATION + " TEXT)";
+
+    private static final String CREATE_TABLE_CITE_REASON =
+            "CREATE TABLE " + TABLE_CITE_REASON + " ("+
+                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_CITATIONS_TYPE + " TEXT)";
+
 
 
     public ParkingHelper(Context context) {
@@ -92,6 +104,8 @@ public class ParkingHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_OWNERS);
         db.execSQL(CREATE_TABLE_CITATIONS);
         db.execSQL(CREATE_TABLE_VEHICLE_SNAPSHOT);
+        db.execSQL(CREATE_TABLE_LOCATION);
+        db.execSQL(CREATE_TABLE_CITE_REASON);
         if (!db.isReadOnly()){
             db.execSQL("PRAGMA foreign_keys=ON;");
         }

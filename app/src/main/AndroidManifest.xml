@@ -88,6 +88,14 @@
             android:name=".ui.CitationEdit"
             android:label="@string/title_activity_citation_edit" >
         </activity>
+        <activity
+            android:name=".ui.EditLocationCiteList"
+            android:label="@string/title_activity_edit_locatio_cite_list"
+            android:parentActivityName=".ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sailloft.whitestag.ui.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

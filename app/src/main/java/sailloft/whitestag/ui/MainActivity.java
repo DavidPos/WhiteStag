@@ -147,9 +147,20 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+
+        switch (id){
+            case R.id.location_edit:
+                Intent intent = new Intent(this, EditLocationCiteList.class);
+                intent.putExtra("type", "location");
+                startActivity(intent);
+                break;
+
+            case R.id.cite_reason_edit:
+                Intent intentA = new Intent(this, EditLocationCiteList.class);
+                intentA.putExtra("type", "cite");
+                startActivity(intentA);
+
+                break;
         }
 
         return super.onOptionsItemSelected(item);

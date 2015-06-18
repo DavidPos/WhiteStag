@@ -86,4 +86,8 @@
     <string name="title_activity_vehicle_list">VehicleList</string>
     <string name="title_activity_vehicle_edit">VehicleEdit</string>
     <string name="title_activity_citation_edit">CitationEdit</string>
+    <string name="menu_locations_label">Edit Locations</string>
+    <string name="menu_cite_reason_edit">Cite Reason Edit</string>
+    <string name="title_activity_edit_locatio_cite_list">EditLocatioCiteList</string>
+    <string name="empty_label">No Information to show</string>
 </resources>
