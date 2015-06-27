@@ -74,6 +74,7 @@ public class EditLocationCiteList extends ListActivity {
                             mParkingDataSource.insertLocation(mLocationData);
                             adapter.notifyDataSetChanged();
                         }
+                        updateList();
                         if (type.equals("cite")) {
                             String cite = mData.getText().toString();
                             CiteReasonData mCiteReason = new CiteReasonData(cite);
@@ -81,6 +82,7 @@ public class EditLocationCiteList extends ListActivity {
                             adapter.notifyDataSetChanged();
 
                         }
+                        updateList();
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -114,6 +116,12 @@ public class EditLocationCiteList extends ListActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        updateList();
+
+
+
+    }
+    private void updateList(){
         if (type.equals("cite")){
             Cursor cursor = mParkingDataSource.selectAllCiteReasons();
             cursor.moveToFirst();
@@ -161,14 +169,12 @@ public class EditLocationCiteList extends ListActivity {
 
             }
 
-                String[] keys = {KEY_LOCATION};
-                int[] ids = {android.R.id.text1, android.R.id.text2};
-                adapter = new SimpleAdapter(this, allData,
-                        android.R.layout.simple_list_item_1, keys, ids);
-                setListAdapter(adapter);
-            }
-
-
+            String[] keys = {KEY_LOCATION};
+            int[] ids = {android.R.id.text1, android.R.id.text2};
+            adapter = new SimpleAdapter(this, allData,
+                    android.R.layout.simple_list_item_1, keys, ids);
+            setListAdapter(adapter);
+        }
     }
 
 
