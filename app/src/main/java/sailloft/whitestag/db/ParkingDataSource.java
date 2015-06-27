@@ -370,6 +370,31 @@ public class ParkingDataSource {
         return rowsUpdated;
 
     }
+
+    public int updateLocations(String oldLocation, String newLocation){
+        ContentValues values = new ContentValues();
+        String whereClause = ParkingHelper.COLUMN_LOCATION + " = ?" ;
+        values.put(ParkingHelper.COLUMN_LOCATION, newLocation);
+        int rowsUpdated = mDatabase.update(ParkingHelper.TABLE_LOCATION,
+                values,
+                whereClause,
+                new String[]{oldLocation});
+        return rowsUpdated;
+    }
+
+    public int updateCiteReason(String oldCiteReason, String newCiteReason){
+        ContentValues values = new ContentValues();
+        String whereClause = ParkingHelper.COLUMN_CITATIONS_TYPE + " = ?" ;
+        values.put(ParkingHelper.COLUMN_CITATIONS_TYPE, newCiteReason);
+        int rowsUpdated = mDatabase.update(ParkingHelper.TABLE_CITE_REASON,
+                values,
+                whereClause,
+                new String[]{oldCiteReason});
+        return rowsUpdated;
+    }
+
+
+
     //delete
 
 }

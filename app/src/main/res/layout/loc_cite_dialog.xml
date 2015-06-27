@@ -10,8 +10,9 @@
         android:id="@+id/addInfoLabel"
         android:textColor="@android:color/black"
         android:textSize="20sp"
-        android:layout_marginTop="88dp"
 
+
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"/>
 
     <EditText

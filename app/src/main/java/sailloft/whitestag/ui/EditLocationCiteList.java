@@ -83,7 +83,7 @@ public class EditLocationCiteList extends ListActivity {
 
                         }
                         updateList();
-                        adapter.notifyDataSetChanged();
+
                     }
                 });
 
