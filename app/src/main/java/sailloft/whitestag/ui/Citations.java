@@ -1,6 +1,7 @@
 package sailloft.whitestag.ui;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -26,6 +27,7 @@ import java.util.Locale;
 
 import sailloft.whitestag.R;
 import sailloft.whitestag.db.ParkingDataSource;
+import sailloft.whitestag.db.ParkingHelper;
 import sailloft.whitestag.model.CitationsData;
 
 
@@ -43,6 +45,7 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
     private int ownerId;
     private String mPlate;
     private String mState;
+    ArrayList<String> locations;
 
     public static final String TAG = Citations.class.getSimpleName();
 
@@ -69,41 +72,7 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
         mDataSource = new ParkingDataSource(this);
 
 
-        citeReasonPicker = (FloatingLabelItemPicker<String>)findViewById(R.id.citeReason);
 
-        citeReasonPicker.setAvailableItems(new ArrayList<String>(Arrays.asList("Item 1.1", "Item 1.2", "Item 1.3", "Item 1.4", "Item 1.5", "Item 1.6", "Item 1.7", "Item 1.8")));
-        citeReasonPicker.setWidgetListener(new FloatingLabelItemPicker.OnWidgetEventListener<String>() {
-            @Override
-            public void onShowItemPickerDialog(FloatingLabelItemPicker<String> source) {
-                StringPickerDialogFragment citePicker = StringPickerDialogFragment.newInstance(
-                        source.getId(),
-                        "Reason For Citation",
-                        "OK", "Cancel",
-                        true,
-                        source.getSelectedIndices(),
-                        new ArrayList<>(source.getAvailableItems()));
-
-                citePicker.show(getSupportFragmentManager(), "ItemPicker");
-            }
-        });
-        locationPicker = (FloatingLabelItemPicker<String>)findViewById(R.id.locationPicker);
-        String[] location = getResources().getStringArray(R.array.locations);
-
-        locationPicker.setAvailableItems(new ArrayList<>(Arrays.asList(location)));
-        locationPicker.setWidgetListener(new FloatingLabelItemPicker.OnWidgetEventListener<String>() {
-            @Override
-            public void onShowItemPickerDialog(FloatingLabelItemPicker<String> source) {
-                StringPickerDialogFragment location = StringPickerDialogFragment.newInstance(
-                        source.getId(),
-                        "Select Location",
-                        "OK", "Cancel",
-                        false,
-                        source.getSelectedIndices(),
-                        new ArrayList<>(source.getAvailableItems()));
-
-                location.show(getSupportFragmentManager(), "Item");
-            }
-        });
 
 }
 
@@ -135,6 +104,51 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
     } catch (SQLException e) {
         e.printStackTrace();
     }
+        Cursor loc = mDataSource.selectAllLocations();
+        loc.moveToFirst();
+        while(!loc.isAfterLast()){
+            int i = loc.getColumnIndex(ParkingHelper. COLUMN_LOCATION);
+            String item = loc.getString(i);
+            locations.add(item);
+            loc.moveToNext();
+        }
+
+        citeReasonPicker = (FloatingLabelItemPicker<String>)findViewById(R.id.citeReason);
+
+        citeReasonPicker.setAvailableItems(new ArrayList<String>(Arrays.asList("Item 1.1", "Item 1.2", "Item 1.3", "Item 1.4", "Item 1.5", "Item 1.6", "Item 1.7", "Item 1.8")));
+        citeReasonPicker.setWidgetListener(new FloatingLabelItemPicker.OnWidgetEventListener<String>() {
+            @Override
+            public void onShowItemPickerDialog(FloatingLabelItemPicker<String> source) {
+                StringPickerDialogFragment citePicker = StringPickerDialogFragment.newInstance(
+                        source.getId(),
+                        "Reason For Citation",
+                        "OK", "Cancel",
+                        true,
+                        source.getSelectedIndices(),
+                        new ArrayList<>(source.getAvailableItems()));
+
+                citePicker.show(getSupportFragmentManager(), "ItemPicker");
+            }
+        });
+        locationPicker = (FloatingLabelItemPicker<String>)findViewById(R.id.locationPicker);
+        String[] location = new String[locations.size()];
+        location = locations.toArray(location);
+
+        locationPicker.setAvailableItems(new ArrayList<>(Arrays.asList(location)));
+        locationPicker.setWidgetListener(new FloatingLabelItemPicker.OnWidgetEventListener<String>() {
+            @Override
+            public void onShowItemPickerDialog(FloatingLabelItemPicker<String> source) {
+                StringPickerDialogFragment location = StringPickerDialogFragment.newInstance(
+                        source.getId(),
+                        "Select Location",
+                        "OK", "Cancel",
+                        false,
+                        source.getSelectedIndices(),
+                        new ArrayList<>(source.getAvailableItems()));
+
+                location.show(getSupportFragmentManager(), "Item");
+            }
+        });
 
 
 
