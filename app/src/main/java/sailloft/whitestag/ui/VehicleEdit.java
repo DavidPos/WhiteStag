@@ -90,6 +90,7 @@ public class VehicleEdit extends ActionBarActivity {
         int b = owner.getColumnIndex(ParkingHelper.COLUMN_LAST_NAME);
 
 
+
         vehicleMake.setInputWidgetText(vehicle.getString(q));
         vehicleModel.setInputWidgetText(vehicle.getString(w));
         vehicleYear.setInputWidgetText(vehicle.getString(z));
@@ -128,10 +129,15 @@ public class VehicleEdit extends ActionBarActivity {
 
                     Cursor owner = mParkingDataSource.selectOwnerByName(name[0].replaceAll("\\s+", ""), name[1].replaceAll("\\s+", ""));
                     if (owner.getCount() <= 0) {
-                        //no owner found so sent to owner add activity
-                        Intent intent = new Intent(VehicleEdit.this, OwnerAdd.class);
+                        //no owner found so sent to owner edit activity
+                        Intent intent = new Intent(VehicleEdit.this, OwnerEdit.class);
+
                         intent.putExtra("first", name[0]);
                         intent.putExtra("last", name[1]);
+                        intent.putExtra("ownerId", mOwner);
+                        intent.putExtra(MainActivity.plateExtra, mPlate);
+                        intent.putExtra(MainActivity.stateExtra, mState);
+
                         startActivityForResult(intent, 2);
 
                     } else {

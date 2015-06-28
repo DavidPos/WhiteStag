@@ -142,7 +142,7 @@ public class VehicleInformation extends ListActivity {
         mState = intent.getStringExtra(MainActivity.stateExtra);
 
 
-            Cursor vehicle = mParkingDataSource.selectOneVehicleByPlate(mPlate, mState);
+         Cursor vehicle = mParkingDataSource.selectOneVehicleByPlate(mPlate, mState);
 
             if (vehicle.getCount() <= 0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);

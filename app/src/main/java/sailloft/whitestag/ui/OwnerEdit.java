@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +49,7 @@ public class OwnerEdit extends ActionBarActivity {
         mState = intent.getStringExtra(MainActivity.stateExtra);
 
 
+
         mFirstName = (FloatingLabelEditText)findViewById(R.id.firstNameOwner);
         mLastName = (FloatingLabelEditText)findViewById(R.id.lastName);
         mPermits = (FloatingLabelEditText)findViewById(R.id.permits);
@@ -55,6 +57,7 @@ public class OwnerEdit extends ActionBarActivity {
         mDepartment = (FloatingLabelEditText)findViewById(R.id.department);
         mAddOwner = (FloatingActionButton)findViewById(R.id.addOwnerButton);
         mParkingDataSource = new ParkingDataSource(this);
+
 
 
     }
@@ -67,6 +70,7 @@ public class OwnerEdit extends ActionBarActivity {
             e.printStackTrace();
         }
         //filling in text views with information
+
         Cursor owner = mParkingDataSource.selectVehicleOwner(ownerID);
         owner.moveToFirst();
             int q = owner.getColumnIndex(ParkingHelper.COLUMN_FIRST_NAME);
@@ -90,59 +94,63 @@ public class OwnerEdit extends ActionBarActivity {
                 //check if the entered name is new or another entry in the database
                 Cursor owner = mParkingDataSource.selectOwnerByName(mFirstName.getInputWidgetText().toString(),
                         mLastName.getInputWidgetText().toString());
-                owner.moveToFirst();
-                int z = owner.getColumnIndex(ParkingHelper.COLUMN_ID);
-                ownerCheck = owner.getInt(z);
+                if(owner.getCount() == 0){
+                    //no owner found update with current information
+                    updateOwner(ownerID);
+                    Log.i("This is the Plate", mPlate + mState);
+                    returnToVi();
+                }
+                else {
+                    owner.moveToFirst();
+                    int z = owner.getColumnIndex(ParkingHelper.COLUMN_ID);
+                    ownerCheck = owner.getInt(z);
                 /*if owner was null when we started check if the new owner name is null.
                 if it is null we don't want to search for a null but use current ID
                 if it is not null at onclick then we need to check to see if the owner is in the db
                  */
-                if (checkNull){
+                    if (checkNull) {
 
-                    if (checkForNull()){
-                        //still null add any info to current ownerId
-                       updateOwner(ownerID);
-                        returnToVi();
-                    }
-                    else{
-                        //not null anymore check if name in db
-                        if (owner.getCount() == 0){
-                            //no owner by name so use current id and insert in new information
+                        if (checkForNull()) {
+                            //still null add any info to current ownerId
                             updateOwner(ownerID);
                             returnToVi();
+                        } else {
+                            //not null anymore check if name in db
+                            if (owner.getCount() == 0) {
+                                //no owner by name so use current id and insert in new information
+                                updateOwner(ownerID);
+                                returnToVi();
+                            } else {
+                                //owner is in db so use that ownerId and up date the vehicle owner
+
+                                mParkingDataSource.updateVehicleOwner(ownerCheck, mPlate, mState);
+                                returnToVi();
+                            }
+
                         }
-                        else{
-                            //owner is in db so use that ownerId and up date the vehicle owner
 
-                            mParkingDataSource.updateVehicleOwner(ownerCheck,mPlate,mState);
-                            returnToVi();
-                        }
-
-                    }
-
-                }else {
+                    } else {
                     /*the text fields are not null then we need to check if there is a entry with name in db
                       if no entry then use current ownerId, if there is a owner in db use that owner Id instead
                      */
-                    if (owner.getCount()<= 0 ) {
-                        //no owner found by name so add owner using current id
-                        updateOwner(ownerID);
+                        if (owner.getCount() <= 0) {
+                            //no owner found by name so add owner using current id
+                            updateOwner(ownerID);
 
-                    }
-                    else{
-                        if (ownerCheck == ownerID) {
-                            //same ID so update current owner
-                           updateOwner(ownerID);
-                            returnToVi();
                         } else {
-                            //different owner so change the vehicle owner
-                            mParkingDataSource.updateVehicleOwner(ownerCheck,mPlate,mState);
-                            returnToVi();
+                            if (ownerCheck == ownerID) {
+                                //same ID so update current owner
+                                updateOwner(ownerID);
+                                returnToVi();
+                            } else {
+                                //different owner so change the vehicle owner
+                                mParkingDataSource.updateVehicleOwner(ownerCheck, mPlate, mState);
+                                returnToVi();
+                            }
                         }
                     }
+
                 }
-
-
 
 
 

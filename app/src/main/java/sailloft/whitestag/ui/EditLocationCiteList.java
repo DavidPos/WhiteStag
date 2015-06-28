@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ public class EditLocationCiteList extends ListActivity {
     private FloatingActionButton addItem;
     private LocationData mLocationData;
     private SimpleAdapter adapter;
+    private ArrayList<HashMap<String, String>> allData;
 
 
 
@@ -47,67 +49,20 @@ public class EditLocationCiteList extends ListActivity {
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.notifyDataSetChanged();
-                final AlertDialog.Builder addAlert = new AlertDialog.Builder(EditLocationCiteList.this);
-                LayoutInflater inflater = getLayoutInflater();
-                final View dialogView = inflater.inflate(R.layout.loc_cite_dialog, null);
-                addAlert.setTitle("New Addition");
-                addAlert.setView(dialogView);
-                final EditText mData = (EditText) dialogView.findViewById(R.id.addInfoText);
-                mData.requestFocus();
-                final TextView mAddInfo = (TextView) dialogView.findViewById(R.id.addInfoLabel);
-                if (type.equals("location")) {
-                    mAddInfo.setText("Location");
 
-                } else {
-                    mAddInfo.setText("Cite Reason");
-                }
-
-
-                addAlert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (type.equals("location")) {
-
-                            String info = mData.getText().toString();
-                            mLocationData = new LocationData(info);
-                            mParkingDataSource.insertLocation(mLocationData);
-                            adapter.notifyDataSetChanged();
-                        }
-                        updateList();
-                        if (type.equals("cite")) {
-                            String cite = mData.getText().toString();
-                            CiteReasonData mCiteReason = new CiteReasonData(cite);
-                            mParkingDataSource.insertCiteReason(mCiteReason);
-                            adapter.notifyDataSetChanged();
-
-                        }
-                        updateList();
-
-                    }
-                });
-
-                addAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                addAlert.show();
-                adapter.notifyDataSetChanged();
+                callAlert("", 0);
 
 
             }
-
-
         });
 
 
 
 
 
+
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -125,8 +80,7 @@ public class EditLocationCiteList extends ListActivity {
         if (type.equals("cite")){
             Cursor cursor = mParkingDataSource.selectAllCiteReasons();
             cursor.moveToFirst();
-            ArrayList<HashMap<String, String>> allData =
-                    new ArrayList<HashMap<String, String>>();
+            allData = new ArrayList<HashMap<String, String>>();
             while (!cursor.isAfterLast()) {
                 int i = cursor.getColumnIndex(ParkingHelper.COLUMN_CITATIONS_TYPE);
 
@@ -152,8 +106,7 @@ public class EditLocationCiteList extends ListActivity {
         if (type.equals("location")){
             Cursor cursor = mParkingDataSource.selectAllLocations();
             cursor.moveToFirst();
-            ArrayList<HashMap<String, String>> allData =
-                    new ArrayList<HashMap<String, String>>();
+            allData = new ArrayList<>();
             while (!cursor.isAfterLast()) {
                 int i = cursor.getColumnIndex(ParkingHelper.COLUMN_LOCATION);
 
@@ -177,7 +130,92 @@ public class EditLocationCiteList extends ListActivity {
         }
     }
 
+    private void callAlert(final String text, final int update){
+        final AlertDialog.Builder addAlert = new AlertDialog.Builder(EditLocationCiteList.this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.loc_cite_dialog, null);
+        addAlert.setTitle("New Addition");
+        addAlert.setView(dialogView);
+        final EditText mData = (EditText) dialogView.findViewById(R.id.addInfoText);
+        mData.requestFocus();
+        final TextView mAddInfo = (TextView) dialogView.findViewById(R.id.addInfoLabel);
+        if (type.equals("location")) {
+            mAddInfo.setText("Location");
+            mData.setText(text);
 
+        } else {
+            mAddInfo.setText("Cite Reason");
+            mData.setText(text);
+        }
+
+
+        addAlert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (type.equals("location")) {
+                    if (update == 0) {
+
+                        String info = mData.getText().toString();
+                        mLocationData = new LocationData(info);
+                        mParkingDataSource.insertLocation(mLocationData);
+                        adapter.notifyDataSetChanged();
+                    }
+                    if (update == 1){
+                        String info = mData.getText().toString();
+                        mParkingDataSource.updateLocations(text, info);
+                    }
+                }
+                updateList();
+                if (type.equals("cite")) {
+                    if (update == 0) {
+                        String cite = mData.getText().toString();
+                        CiteReasonData mCiteReason = new CiteReasonData(cite);
+                        mParkingDataSource.insertCiteReason(mCiteReason);
+                        adapter.notifyDataSetChanged();
+                    }
+                    if (update == 1){
+                        String cite = mData.getText().toString();
+
+                        mParkingDataSource.updateCiteReason(text, cite);
+
+                    }
+
+                }
+                updateList();
+
+            }
+        });
+
+        addAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        addAlert.show();
+        adapter.notifyDataSetChanged();
+
+
+    }
+
+
+
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        HashMap data = allData.get(position);
+        if(type.equals("location")){
+
+            callAlert((String)data.get(KEY_LOCATION), 1);
+        }
+        if (type.equals("cite")){
+            callAlert((String)data.get(KEY_REASON), 1);
+        }
+        updateList();
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
