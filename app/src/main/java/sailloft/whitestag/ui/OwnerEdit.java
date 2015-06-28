@@ -35,6 +35,8 @@ public class OwnerEdit extends ActionBarActivity {
     private String mPlate;
     private String mState;
     private Boolean checkNull;
+    private String fName;
+    private String lName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,9 @@ public class OwnerEdit extends ActionBarActivity {
         ownerID = intent.getIntExtra("ownerId", -1);
         mPlate = intent.getStringExtra(MainActivity.plateExtra);
         mState = intent.getStringExtra(MainActivity.stateExtra);
+        fName = intent.getStringExtra("first");
+        lName = intent.getStringExtra("last");
+
 
 
 
@@ -79,8 +84,16 @@ public class OwnerEdit extends ActionBarActivity {
             int y = owner.getColumnIndex(ParkingHelper.COLUMN_LOCATION);
             int p = owner.getColumnIndex(ParkingHelper.COLUMN_DEPARTMENT);
 
-            mFirstName.setInputWidgetText(owner.getString(q));
-            mLastName.setInputWidgetText(owner.getString(w));
+            if (fName == null && lName ==null){
+                mFirstName.setInputWidgetText(owner.getString(q));
+                mLastName.setInputWidgetText(owner.getString(w));
+            }
+        else{
+                mFirstName.setInputWidgetText(fName);
+                mLastName.setInputWidgetText(lName);
+            }
+
+
             mPermits.setInputWidgetText(owner.getString(z));
             mBuilding.setInputWidgetText(owner.getString(y));
             mDepartment.setInputWidgetText(owner.getString(p));

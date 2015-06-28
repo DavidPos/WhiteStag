@@ -89,8 +89,6 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
         }
         else if(pickerId == R.id.locationPicker ){
             locationPicker.setSelectedIndices(selectedIndices);
-            String mLocations = getResources().getTextArray(R.array.locations)[selectedIndices[0]].toString();
-            Log.i(TAG, mLocations );
 
         }
 

@@ -19,7 +19,6 @@ import com.marvinlabs.widget.floatinglabel.itempicker.StringPickerDialogFragment
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,6 +44,8 @@ public class CitationEdit extends ActionBarActivity implements ItemPickerListene
     private String mPlate;
     private String mState;
     private String mDate;
+    private ArrayList<String> locations = new ArrayList<>();
+    private ArrayList<String> citeReasons = new ArrayList<>();
 
 
     @Override
@@ -66,11 +67,27 @@ public class CitationEdit extends ActionBarActivity implements ItemPickerListene
         addInfo = (FloatingLabelEditText)findViewById(R.id.addInfo);
         addCite =(FloatingActionButton)findViewById(R.id.addCiteButton);
         mDataSource = new ParkingDataSource(this);
+        Cursor loc = mDataSource.selectAllLocations();
+        loc.moveToFirst();
+        while(!loc.isAfterLast()){
+            int i = loc.getColumnIndex(ParkingHelper.COLUMN_LOCATION);
+            String item = loc.getString(i);
+            locations.add(item);
+            loc.moveToNext();
+        }
+        Cursor citeR = mDataSource.selectAllCiteReasons();
+        citeR.moveToFirst();
+        while(!citeR.isAfterLast()){
+            int z = citeR.getColumnIndex(ParkingHelper.COLUMN_CITATIONS_TYPE);
+            String cite = citeR.getString(z);
+            citeReasons.add(cite);
+            citeR.moveToNext();
+        }
 
 
         citeReasonPicker = (FloatingLabelItemPicker<String>)findViewById(R.id.citeReason);
 
-        citeReasonPicker.setAvailableItems(new ArrayList<String>(Arrays.asList("Item 1.1", "Item 1.2", "Item 1.3", "Item 1.4", "Item 1.5", "Item 1.6", "Item 1.7", "Item 1.8")));
+        citeReasonPicker.setAvailableItems(citeReasons);
         citeReasonPicker.setWidgetListener(new FloatingLabelItemPicker.OnWidgetEventListener<String>() {
             @Override
             public void onShowItemPickerDialog(FloatingLabelItemPicker<String> source) {
@@ -86,9 +103,9 @@ public class CitationEdit extends ActionBarActivity implements ItemPickerListene
             }
         });
         locationPicker = (FloatingLabelItemPicker<String>)findViewById(R.id.locationPicker);
-        String[] location = getResources().getStringArray(R.array.locations);
 
-        locationPicker.setAvailableItems(new ArrayList<>(Arrays.asList(location)));
+
+        locationPicker.setAvailableItems(locations);
         locationPicker.setWidgetListener(new FloatingLabelItemPicker.OnWidgetEventListener<String>() {
             @Override
             public void onShowItemPickerDialog(FloatingLabelItemPicker<String> source) {

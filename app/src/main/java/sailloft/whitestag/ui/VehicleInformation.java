@@ -48,6 +48,8 @@ public class VehicleInformation extends ListActivity {
 
     private List<Item> items;
 
+    private String fName;
+    private String lName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +112,8 @@ public class VehicleInformation extends ListActivity {
                 intent.putExtra("ownerId", ownerId);
                 intent.putExtra(MainActivity.plateExtra, mPlate);
                 intent.putExtra(MainActivity.stateExtra, mState);
+                intent.putExtra("first", fName);
+                intent.putExtra("last", lName);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -192,6 +196,7 @@ public class VehicleInformation extends ListActivity {
                     if(owner.getString(q)== null && owner.getString(w) == null){
                         ownerLabel.setText("Owner is unknown");
                     }else {
+
                         ownerLabel.setText("Owner:  " + owner.getString(q) + " " + owner.getString(w));
                     }
                     updateList(citations, snap);
