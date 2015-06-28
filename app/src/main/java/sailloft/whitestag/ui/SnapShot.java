@@ -1,6 +1,7 @@
 package sailloft.whitestag.ui;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -18,12 +19,12 @@ import com.marvinlabs.widget.floatinglabel.itempicker.StringPickerDialogFragment
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
 import sailloft.whitestag.R;
 import sailloft.whitestag.db.ParkingDataSource;
+import sailloft.whitestag.db.ParkingHelper;
 import sailloft.whitestag.model.SnapShotData;
 
 
@@ -36,6 +37,7 @@ public class SnapShot extends ActionBarActivity implements ItemPickerListener<St
     private SnapShotData mSnapShotData;
     private String mPlate;
     private String mState;
+    private ArrayList<String> locations = new ArrayList<>();
 
 
     @Override
@@ -54,24 +56,7 @@ public class SnapShot extends ActionBarActivity implements ItemPickerListener<St
         mPlate = intent.getStringExtra("Plate");
         mState = intent.getStringExtra("State");
 
-        locationPicker = (FloatingLabelItemPicker<String>)findViewById(R.id.locationPicker);
-        String[] location = getResources().getStringArray(R.array.locations);
 
-        locationPicker.setAvailableItems(new ArrayList<>(Arrays.asList(location)));
-        locationPicker.setWidgetListener(new FloatingLabelItemPicker.OnWidgetEventListener<String>() {
-            @Override
-            public void onShowItemPickerDialog(FloatingLabelItemPicker<String> source) {
-                StringPickerDialogFragment location = StringPickerDialogFragment.newInstance(
-                        source.getId(),
-                        "Select Location",
-                        "OK", "Cancel",
-                        false,
-                        source.getSelectedIndices(),
-                        new ArrayList<>(source.getAvailableItems()));
-
-                location.show(getSupportFragmentManager(), "ItemPicker");
-            }
-        });
     }
 
     @Override
@@ -94,6 +79,32 @@ public class SnapShot extends ActionBarActivity implements ItemPickerListener<St
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        locationPicker = (FloatingLabelItemPicker<String>)findViewById(R.id.locationPicker);
+        Cursor loc = mParkingDataSource.selectAllLocations();
+        loc.moveToFirst();
+        while(!loc.isAfterLast()){
+            int i = loc.getColumnIndex(ParkingHelper.COLUMN_LOCATION);
+            String item = loc.getString(i);
+            locations.add(item);
+            loc.moveToNext();
+        }
+
+
+        locationPicker.setAvailableItems(locations);
+        locationPicker.setWidgetListener(new FloatingLabelItemPicker.OnWidgetEventListener<String>() {
+            @Override
+            public void onShowItemPickerDialog(FloatingLabelItemPicker<String> source) {
+                StringPickerDialogFragment location = StringPickerDialogFragment.newInstance(
+                        source.getId(),
+                        "Select Location",
+                        "OK", "Cancel",
+                        false,
+                        source.getSelectedIndices(),
+                        new ArrayList<>(source.getAvailableItems()));
+
+                location.show(getSupportFragmentManager(), "ItemPicker");
+            }
+        });
 
         addSnap.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -59,26 +59,7 @@
         <item>WY</item>
     </string-array>
     <string name="title_activity_citations">Citations</string>
-    <string-array name="locations">
-        <item>1: NICU</item>
-        <item>2: Postage</item>
-        <item>3: LND</item>
-        <item>4: SYB</item>
-        <item>5: Oversize Lot</item>
-        <item>6: Outside West Garage</item>
-        <item>7 and 8: West Garage</item>
-        <item>9: MTT</item>
-        <item>10 and 11: Center Lot</item>
-        <item>12: Supply Center North</item>
-        <item>13: Supply Center South</item>
-        <item>14: Supply Center East</item>
-        <item>15: North Outer Lot East Garage</item>
-        <item>16: East Garage</item>
-        <item>17, 18 and 19: East Process Center</item>
-        <item>20: North Process Center</item>
-        <item>21: ED</item>
-        <item>22: MRI</item>
-    </string-array>
+
     <string name="title_activity_snap_shot">SnapShot</string>
     <string name="title_activity_vehicle_add">VehicleAdd</string>
     <string name="title_activity_owner_add">OwnerAdd</string>
