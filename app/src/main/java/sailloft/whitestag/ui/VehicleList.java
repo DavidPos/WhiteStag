@@ -48,6 +48,7 @@ public class VehicleList extends ListActivity {
             updateList(cursor);
 
 
+
         } else {
             Cursor cursor = mParkingDataSource.selectAllVehiclesByState(intent.getStringExtra(MainActivity.stateExtra));
             updateList(cursor);
