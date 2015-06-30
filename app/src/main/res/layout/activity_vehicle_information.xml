@@ -75,10 +75,10 @@
             android:id="@+id/snapShotButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/white"
+            fab:fab_colorNormal="@color/blue_semi_transparent"
             fab:fab_title="Add to Snapshot"
             fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_addButtonPlusIconColor="@color/half_black"
+            fab:fab_addButtonPlusIconColor="@color/black_semi_transparent"
             />
 
         <com.getbase.floatingactionbutton.AddFloatingActionButton
