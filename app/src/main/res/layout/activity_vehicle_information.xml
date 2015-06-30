@@ -85,11 +85,11 @@
             android:id="@+id/citationButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/white"
+            fab:fab_colorNormal="@color/blue_semi_transparent"
             fab:fab_title="Issue citation"
             fab:fab_labelStyle="@style/menu_labels_style"
             fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_addButtonPlusIconColor="@color/half_black"
+            fab:fab_addButtonPlusIconColor="@color/black_semi_transparent"
             />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
