@@ -67,6 +67,38 @@ public class CitationEdit extends ActionBarActivity implements ItemPickerListene
         addInfo = (FloatingLabelEditText)findViewById(R.id.addInfo);
         addCite =(FloatingActionButton)findViewById(R.id.addCiteButton);
         mDataSource = new ParkingDataSource(this);
+
+    }
+
+    @Override
+    public void onCancelled(int pickerId) {
+    }
+
+    @Override
+    public void onItemsSelected(int pickerId, int[] selectedIndices) {
+        if (pickerId == R.id.citeReason) {
+            citeReasonPicker.setSelectedIndices(selectedIndices);
+            //for() to go through each item in the selected indices array and add to the string
+
+        }
+        else if(pickerId == R.id.locationPicker ){
+            locationPicker.setSelectedIndices(selectedIndices);
+
+
+
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            mDataSource.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         Cursor loc = mDataSource.selectAllLocations();
         loc.moveToFirst();
         while(!loc.isAfterLast()){
@@ -121,36 +153,6 @@ public class CitationEdit extends ActionBarActivity implements ItemPickerListene
             }
         });
 
-    }
-
-    @Override
-    public void onCancelled(int pickerId) {
-    }
-
-    @Override
-    public void onItemsSelected(int pickerId, int[] selectedIndices) {
-        if (pickerId == R.id.citeReason) {
-            citeReasonPicker.setSelectedIndices(selectedIndices);
-            //for() to go through each item in the selected indices array and add to the string
-
-        }
-        else if(pickerId == R.id.locationPicker ){
-            locationPicker.setSelectedIndices(selectedIndices);
-
-
-
-        }
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        try {
-            mDataSource.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         Cursor cite = mDataSource.selectCitation(vehicleId, mDate);
         cite.moveToFirst();
         int z = cite.getColumnIndex(ParkingHelper.COLUMN_OFFICER);
