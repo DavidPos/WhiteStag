@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText;
@@ -44,6 +45,21 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
 
         mDataSource = new ParkingDataSource(MainActivity.this);
         plate = (FloatingLabelEditText)findViewById(R.id.plateNumberEdit);
+        plate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus){
+                    getWindow().setSoftInputMode(
+                            WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE
+                    );
+                }
+                if (!hasFocus){
+                    getWindow().setSoftInputMode(
+                            WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+                    );
+                }
+            }
+        });
 
 
         plateSearch = (FloatingActionButton)findViewById(R.id.searchFab);

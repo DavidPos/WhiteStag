@@ -204,6 +204,8 @@ public class CitationEdit extends ActionBarActivity implements ItemPickerListene
             @Override
             public void onClick(View v) {
                 String citeReason = citeReasonPicker.getSelectedItems().toString();
+                citeReason = citeReason.replaceAll("\\W", "");
+                citeReason = citeReason.replaceAll("\\s", "");
 
                 mDataSource.updateCitation(vehicleId,
                         mDate,

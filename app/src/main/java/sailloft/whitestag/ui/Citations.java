@@ -5,12 +5,10 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText;
@@ -169,6 +167,8 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
 
 
                     String citeReason = citeReasonPicker.getSelectedItems().toString();
+                    citeReason = citeReason.replaceAll("\\W", "");
+                    citeReason = citeReason.replaceAll("\\s", "");
 
 
                     mCitationsData = new CitationsData(ownerId,
@@ -180,7 +180,7 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
                             addInfo.getInputWidgetText().toString(),
                             locationPicker.getInputWidget().getText().toString());
                     mDataSource.insertCitations(mCitationsData);
-                    Toast.makeText(Citations.this, "Citation added!", Toast.LENGTH_LONG).show();
+
                     Intent intent = new Intent(Citations.this, VehicleInformation.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.putExtra(MainActivity.plateExtra, mPlate);

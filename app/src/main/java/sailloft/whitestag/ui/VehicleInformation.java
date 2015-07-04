@@ -6,14 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
@@ -240,9 +238,7 @@ public class VehicleInformation extends ListActivity {
                     }
 
 
-                    if (citations == null && snap == null) {
-                        Log.i(TAG, "No citations");
-                    }
+
 
                 }
             }
@@ -300,13 +296,13 @@ public class VehicleInformation extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        Toast.makeText(VehicleInformation.this, "CLick!", Toast.LENGTH_LONG).show();
+
         Item item = items.get(position);
         if (position <= citeCount && position != 0) {
 
             ListItem lItem = (ListItem) item;
             String date = lItem.getStr2();
-            Log.i("Date", date);
+
             Intent intent = new Intent(VehicleInformation.this, CitationEdit.class);
             intent.putExtra("vehicleID", vehicleID);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
