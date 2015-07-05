@@ -8,7 +8,8 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context=".MainActivity">
+                tools:context=".MainActivity"
+                android:background="@drawable/bg_gradient">
 
 
     <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
@@ -18,8 +19,11 @@
         android:layout_marginBottom="15dp"
         android:drawablePadding="10dp"
         app:flw_labelText="Plate #"
+        app:flw_inputWidgetTextColor="@color/white"
+        app:flw_labelTextColor="@color/white"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/statePicker"/>
+        android:layout_above="@+id/statePicker"
+        />
 
     <com.marvinlabs.widget.floatinglabel.itempicker.FloatingLabelItemPicker
         android:id="@+id/statePicker"
@@ -27,8 +31,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         app:flw_labelText="State"
+        app:flw_inputWidgetTextColor="@color/white"
+        app:flw_labelTextColor="@color/white"
         android:layout_centerInParent="true"
-        android:paddingBottom="50dp"/>
+        />
 
     <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/searchFab"

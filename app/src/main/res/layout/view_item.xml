@@ -17,7 +17,7 @@
             android:id="@+id/citeOrLocation"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/message_vertical_padding"
-            android:textColor="@android:color/black"
+            android:textColor="@color/button_color"
             android:text="Cite Reason"
             android:layout_alignParentLeft="true"
             android:textSize="16sp"/>
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:text="Time"
             android:textSize="12sp"
-            android:textColor="@android:color/black"
+            android:textColor="@color/button_color"
             android:id="@+id/timeLabel"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:layout_below="@id/citeOrLocation"

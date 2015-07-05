@@ -8,7 +8,8 @@
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:fab="http://schemas.android.com/apk/res-auto"
-                tools:context="sailloft.whitestag.ui.VehicleEdit">
+                tools:context="sailloft.whitestag.ui.VehicleEdit"
+                android:background="@drawable/bg_gradient">
 
 
 <TextView
@@ -18,7 +19,7 @@
     tools:text="Edit Vehicle"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:textSize="25sp"
-    android:textColor="@android:color/black"
+    android:textColor="@android:color/white"
     android:layout_centerHorizontal="true"/>
 
 <LinearLayout
@@ -29,7 +30,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:layout_below="@+id/addVehicleLabel">
+    android:layout_below="@+id/addVehicleLabel"
+    >
 
 
 
@@ -38,14 +40,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        app:flw_labelText="Plate #" />
+        app:flw_labelText="Plate #"
+        app:flw_inputWidgetTextColor="@color/white"
+        app:flw_labelTextColor="@color/white"/>
 
     <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
         android:id="@+id/statePickerVeh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:flw_labelText="State"
-        android:layout_marginBottom="15dp"/>
+        android:layout_marginBottom="15dp"
+        app:flw_inputWidgetTextColor="@color/white"
+        app:flw_labelTextColor="@color/white"/>
 
     <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
         android:id="@+id/vehicleMake"
@@ -53,7 +59,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:drawablePadding="10dp"
-        app:flw_labelText= "Vehicle Make" />
+        app:flw_labelText= "Vehicle Make"
+        app:flw_inputWidgetTextColor="@color/white"
+        app:flw_labelTextColor="@color/white"/>
 
     <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
         android:id="@+id/vehicleModelSnap"
@@ -61,7 +69,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:drawablePadding="10dp"
-        app:flw_labelText="Vehicle Model" />
+        app:flw_labelText="Vehicle Model"
+        app:flw_inputWidgetTextColor="@color/white"
+        app:flw_labelTextColor="@color/white"/>
 
 
     <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
@@ -69,24 +79,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        app:flw_labelText="Vehicle Year" />
+        app:flw_labelText="Vehicle Year"
+        app:flw_inputWidgetTextColor="@color/white"
+        app:flw_labelTextColor="@color/white"/>
 
     <com.marvinlabs.widget.floatinglabel.edittext.FloatingLabelEditText
         android:id="@+id/vehicleOwner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        app:flw_labelText="Owner" />
+        app:flw_labelText="Owner"
+        app:flw_inputWidgetTextColor="@color/white"
+        app:flw_labelTextColor="@color/white"/>
 
 </LinearLayout>
 <com.getbase.floatingactionbutton.AddFloatingActionButton
     android:id="@+id/addVehicleButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    fab:fab_addButtonColorNormal="@color/white"
-    fab:fab_addButtonColorPressed="@color/white_pressed"
-    fab:fab_addButtonPlusIconColor="@color/half_black"
-    fab:fab_labelStyle="@style/menu_labels_style"
+    fab:fab_colorNormal="@color/white"
+    fab:fab_colorPressed="@color/white_pressed"
+    fab:fab_plusIconColor="@android:color/black"
+
     android:layout_alignParentBottom="true"
     android:layout_centerHorizontal="true"
     android:layout_marginBottom="16dp"
