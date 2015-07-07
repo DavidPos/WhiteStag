@@ -168,7 +168,7 @@ public class Citations extends ActionBarActivity implements ItemPickerListener<S
 
                     String citeReason = citeReasonPicker.getSelectedItems().toString();
                     citeReason = citeReason.replaceAll("\\W", "");
-
+                    citeReason = citeReason.replaceAll("\\s", "");
 
 
                     mCitationsData = new CitationsData(ownerId,
