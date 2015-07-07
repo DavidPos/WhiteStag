@@ -149,6 +149,8 @@ public class VehicleEdit extends ActionBarActivity {
                                 state.getInputWidgetText().toString(),
                                 vehicleYear.getInputWidgetText().toString(), mOwner);
                         mParkingDataSource.updateVehicle(mVehicle, mPlate, mState);
+                        mState = state.getInputWidgetText().toString();
+                        mPlate =  plateNumber.getInputWidgetText().toString();
 
 
                         Intent intent = new Intent(VehicleEdit.this, VehicleInformation.class);
