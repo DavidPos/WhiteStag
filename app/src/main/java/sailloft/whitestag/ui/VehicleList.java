@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -97,7 +99,19 @@ public class VehicleList extends ListActivity {
         String[] keys = {KEY_PLATE, KEY_STATE};
         int[] ids = {android.R.id.text1, android.R.id.text2};
         SimpleAdapter adapter = new SimpleAdapter(this, allVehicles,
-                android.R.layout.simple_list_item_2, keys, ids);
+                android.R.layout.simple_list_item_2, keys, ids){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+                TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+                text1.setTextColor(getResources().getColor(R.color.white));
+                text2.setTextColor(getResources().getColor(R.color.white));
+
+                return view;
+            }
+        };
+
         setListAdapter(adapter);
 
 

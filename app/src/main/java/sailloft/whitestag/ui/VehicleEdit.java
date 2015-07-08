@@ -149,16 +149,16 @@ public class VehicleEdit extends ActionBarActivity {
                                 state.getInputWidgetText().toString(),
                                 vehicleYear.getInputWidgetText().toString(), mOwner);
                         mParkingDataSource.updateVehicle(mVehicle, mPlate, mState);
-                        mState = state.getInputWidgetText().toString();
-                        mPlate =  plateNumber.getInputWidgetText().toString();
+
 
 
                         Intent intent = new Intent(VehicleEdit.this, VehicleInformation.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                        intent.putExtra(MainActivity.plateExtra, mPlate);
-                        intent.putExtra(MainActivity.stateExtra, mState);
+                        intent.putExtra(MainActivity.plateExtra, plateNumber.getInputWidgetText().toString());
+
+                        intent.putExtra(MainActivity.stateExtra, state.getInputWidgetText().toString());
                         startActivity(intent);
                     }
                 }
