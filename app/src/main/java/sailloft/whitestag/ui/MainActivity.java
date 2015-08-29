@@ -1,6 +1,9 @@
 package sailloft.whitestag.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -34,6 +37,8 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
     private String mState;
     public static final String plateExtra = "PLATE_NUMBER";
     public static final String stateExtra = "PLATE_STATE";
+    private Cursor loc;
+    private Cursor reasons;
 
 
 
@@ -43,7 +48,9 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
         setContentView(R.layout.activity_main);
 
 
+
         mDataSource = new ParkingDataSource(MainActivity.this);
+
         plate = (FloatingLabelEditText)findViewById(R.id.plateNumberEdit);
         plate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -67,37 +74,68 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
         plateSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPlate = plate.getInputWidgetText().toString();
-                mPlate = mPlate.toUpperCase();
-                mState = statePicker.getSelectedItems().toString();
-                mState = mState.replaceAll("\\W", "");
-                mState = mState.replaceAll("\\s", "");
+                if (loc.getCount() == 0 || reasons.getCount() == 0) {
 
-                if (mState.isEmpty() && mPlate.isEmpty()) {
-                    Intent intent = new Intent(MainActivity.this, VehicleList.class);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setMessage("You need to set up locations and reasons first.")
+                            .setTitle("Attention Needed")
+                            .setPositiveButton("Reasons", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intentA = new Intent(MainActivity.this, EditLocationCiteList.class);
+                                    intentA.putExtra("type", "cite");
+                                    startActivity(intentA);
 
-                    plate.setInputWidgetText("");
-                    statePicker.setSelectedIndices(null);
-                    startActivity(intent);
-                } else if(!mState.isEmpty() && !mPlate.isEmpty()) {
+                                }
+                            }).setNegativeButton("Locations", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(MainActivity.this, EditLocationCiteList.class);
+                            intent.putExtra("type", "location");
+                            startActivity(intent);
+                        }
+                    }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else {
+                    mPlate = plate.getInputWidgetText().toString();
+                    mPlate = mPlate.toUpperCase();
+                    mState = statePicker.getSelectedItems().toString();
+                    mState = mState.replaceAll("\\W", "");
+                    mState = mState.replaceAll("\\s", "");
+
+                    if (mState.isEmpty() && mPlate.isEmpty()) {
+                        Intent intent = new Intent(MainActivity.this, VehicleList.class);
+
+                        plate.setInputWidgetText("");
+                        statePicker.setSelectedIndices(null);
+                        startActivity(intent);
+                    } else if (!mState.isEmpty() && !mPlate.isEmpty()) {
 
 
-                    Intent intent = new Intent(MainActivity.this, VehicleInformation.class);
-                    intent.putExtra(plateExtra, mPlate);
-                    intent.putExtra(stateExtra, mState);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    plate.setInputWidgetText("");
-                    statePicker.setSelectedIndices(null);
-                    startActivity(intent);
+                        Intent intent = new Intent(MainActivity.this, VehicleInformation.class);
+                        intent.putExtra(plateExtra, mPlate);
+                        intent.putExtra(stateExtra, mState);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        plate.setInputWidgetText("");
+                        statePicker.setSelectedIndices(null);
+                        startActivity(intent);
 
 
-                }else if (!mState.isEmpty() && mPlate.isEmpty()){
-                    Intent intent = new Intent(MainActivity.this, VehicleList.class);
-                    intent.putExtra(stateExtra, mState);
-                    plate.setInputWidgetText("");
-                    statePicker.setSelectedIndices(null);
-                    startActivity(intent);
+                    } else if (!mState.isEmpty() && mPlate.isEmpty()) {
+                        Intent intent = new Intent(MainActivity.this, VehicleList.class);
+                        intent.putExtra(stateExtra, mState);
+                        plate.setInputWidgetText("");
+                        statePicker.setSelectedIndices(null);
+                        startActivity(intent);
+                    }
                 }
             }
         });
@@ -133,6 +171,8 @@ public class MainActivity extends ActionBarActivity implements ItemPickerListene
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        loc = mDataSource.selectAllLocations();
+        reasons = mDataSource.selectAllCiteReasons();
     }
 
     @Override
